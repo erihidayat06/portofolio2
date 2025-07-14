@@ -33,7 +33,7 @@
 
             <div class="card shadow-sm">
                 <div class="card-body">
-                    {{-- {{ $slot }} --}}
+                    @yield('content')
                 </div>
             </div>
         </div>
