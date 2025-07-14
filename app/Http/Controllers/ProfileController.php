@@ -11,6 +11,8 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
+
+    public function websiteUpdate(Request $request) {}
     /**
      * Display the user's profile form.
      */

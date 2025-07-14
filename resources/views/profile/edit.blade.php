@@ -1,29 +1,47 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+@extends('layouts.main') {{-- Ganti dengan layout Bootstrap kamu --}}
+
+@section('content')
+    <div class="container py-5">
+        <h2 class="fw-semibold h4 text-dark mb-4">
             {{ __('Profile') }}
         </h2>
-    </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-profile-information-form')
+        <div class="row gy-4">
+            {{-- Update Profile Info --}}
+            <div class="col-12 col-md-8 mx-auto">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white fw-semibold">
+                        {{ __('Update Profile Information') }}
+                    </div>
+                    <div class="card-body">
+                        @include('profile.partials.update-profile-information-form')
+                    </div>
                 </div>
             </div>
 
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-password-form')
+            {{-- Update Password --}}
+            <div class="col-12 col-md-8 mx-auto">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white fw-semibold">
+                        {{ __('Update Password') }}
+                    </div>
+                    <div class="card-body">
+                        @include('profile.partials.update-password-form')
+                    </div>
                 </div>
             </div>
 
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.delete-user-form')
+            {{-- Delete Account --}}
+            <div class="col-12 col-md-8 mx-auto">
+                <div class="card shadow-sm border-danger">
+                    <div class="card-header bg-danger text-white fw-semibold">
+                        {{ __('Delete Account') }}
+                    </div>
+                    <div class="card-body">
+                        @include('profile.partials.delete-user-form')
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout>
+@endsection

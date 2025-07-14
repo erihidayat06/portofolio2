@@ -1,0 +1,88 @@
+:root {
+    --bg-main: #191d88;
+    --text-color: #ffc436;
+    --bulat: #337ccf;
+}
+
+.text-main {
+    color: var(--text-color);
+}
+
+.bg-main {
+    background-color: var(--bg-main);
+}
+
+body {
+    background-color: var(--bg-main);
+}
+
+h1 {
+    color: var(--text-color) !important;
+    font-weight: bold !important;
+}
+
+.f-main {
+    color: var(--bg-main) !important;
+}
+
+.nav-link {
+    color: var(--text-color) !important;
+    font-weight: 700 !important;
+    font-family: "Roboto", sans-serif !important;
+}
+
+.btn-main {
+    background-color: var(--text-color);
+}
+
+.bulat {
+    width: 450px;
+    height: 450px;
+    border-radius: 50%;
+    background-color: var(--bulat);
+    position: absolute;
+}
+
+.foto {
+    position: relative;
+    width: 450px;
+    margin-left: 100px;
+    margin-top: 100px;
+    border-radius: 50%;
+    border: 7px solid var(--text-color);
+    background-color: var(--text-color);
+}
+
+.foto-hp {
+    width: 150px;
+    position: absolute;
+    top: 300px;
+    right: 40px;
+    border-radius: 50%;
+    border: 3px solid var(--text-color);
+    background-color: var(--text-color);
+}
+
+.profil {
+    width: 80%;
+    margin: auto;
+    color: white;
+    margin-top: 200px;
+    font-size: 20px;
+}
+
+.project {
+    margin-top: 200px;
+}
+
+.contact {
+    margin-top: 200px;
+}
+
+.card {
+    background-color: var(--text-color) !important;
+}
+
+.modal-project {
+    background-color: var(--bg-main) !important;
+}
