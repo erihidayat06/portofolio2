@@ -77,7 +77,8 @@
                                 <div class="gambar-box">
                                     <img src="{{ asset('storage/' . $img) }}" alt="gambar">
                                     <button type="button" class="hapus-btn"
-                                        onclick="hapusGambarLama({{ $i }})">&times;</button>
+                                        onclick="hapusGambarLama(this)">&times;</button>
+
                                     <input type="hidden" name="gambar_lama[]" value="{{ $img }}">
                                 </div>
                             @endforeach
@@ -164,30 +165,30 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
         let fileList = [];
-        let maxGambar = 5;
+        const maxGambar = 5;
 
-        function hapusGambarLama(index) {
-            const wrapper = document.getElementById('preview-wrapper');
-            const gambarBox = wrapper.querySelectorAll('.gambar-box')[index];
-            const hiddenInputs = document.querySelectorAll('input[name="gambar_lama[]"]');
-
-            if (gambarBox) gambarBox.remove();
-            if (hiddenInputs[index]) hiddenInputs[index].remove();
+        function hapusGambarLama(button) {
+            const gambarBox = button.closest('.gambar-box');
+            if (gambarBox) {
+                const hiddenInput = gambarBox.querySelector('input[name="gambar_lama[]"]');
+                if (hiddenInput) hiddenInput.remove();
+                gambarBox.remove();
+            }
         }
 
         function handleFiles(files) {
             const wrapper = document.getElementById('preview-wrapper');
             const addBox = document.getElementById('add-box');
-            const totalGambarLama = document.querySelectorAll('input[name="gambar_lama[]"]').length;
-            const totalBaru = fileList.length;
-            const totalInput = files.length;
 
-            if ((totalGambarLama + totalBaru + totalInput) > maxGambar) {
+            const currentGambarCount = wrapper.querySelectorAll('.gambar-box').length;
+            const newFiles = Array.from(files);
+
+            if ((currentGambarCount + newFiles.length) > maxGambar) {
                 alert('Maksimal 5 gambar diperbolehkan.');
                 return;
             }
 
-            Array.from(files).forEach((file, i) => {
+            newFiles.forEach((file) => {
                 fileList.push(file);
 
                 const reader = new FileReader();
@@ -203,7 +204,7 @@
                     delBtn.className = 'hapus-btn';
                     delBtn.innerHTML = '&times;';
                     delBtn.onclick = () => {
-                        fileList.splice(i, 1);
+                        fileList = fileList.filter(f => f !== file);
                         box.remove();
                         updateInputFiles();
                     };
