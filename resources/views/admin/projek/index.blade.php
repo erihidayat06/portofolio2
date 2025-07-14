@@ -117,16 +117,18 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ route('projek.edit', $item->id) }}"
-                                            class="btn btn-sm btn-primary">Edit</a>
-                                        <form action="{{ route('projek.destroy', $item->id) }}" method="POST"
-                                            class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn btn-sm btn-danger"
-                                                onclick="return confirm('Yakin hapus?')">Hapus</button>
-                                        </form>
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <a href="{{ route('projek.edit', $item->id) }}"
+                                                class="btn btn-sm btn-primary">Edit</a>
+                                            <form action="{{ route('projek.destroy', $item->id) }}" method="POST"
+                                                onsubmit="return confirm('Yakin hapus?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="btn btn-sm btn-danger">Hapus</button>
+                                            </form>
+                                        </div>
                                     </td>
+
                                 </tr>
                             @endforeach
                         </tbody>
