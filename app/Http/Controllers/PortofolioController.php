@@ -15,7 +15,7 @@ class PortofolioController extends Controller
      */
     public function index()
     {
-        $data = Portofolio::get();
+        $data = Portofolio::orderBy('urutan', 'asc')->get();
         $bahasas = Bahasa::latest()->get();
         $frameworks = Framework::latest()->get();
         return view('admin.projek.index', compact('data', 'bahasas', 'frameworks'));
@@ -40,9 +40,9 @@ class PortofolioController extends Controller
             'nm_projek' => 'required|string|max:255',
             'gambar.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'deskripsi' => 'required|string',
-            'bahasa_id' => 'required|array',
+            'bahasa_id' => 'nullable|array',
             'bahasa_id.*' => 'exists:bahasas,id',
-            'framework_id' => 'required|array',
+            'framework_id' => 'nullable|array',
             'framework_id.*' => 'exists:frameworks,id',
             'link' => 'nullable|url',
         ]);
@@ -101,8 +101,8 @@ class PortofolioController extends Controller
             'nm_projek' => 'required|string|max:255',
             'gambar.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'deskripsi' => 'nullable|string',
-            'bahasa_id' => 'required|array|min:1',
-            'framework_id' => 'required|array|min:1',
+            'bahasa_id' => 'nullable|array|min:1',
+            'framework_id' => 'nullable|array|min:1',
             'link' => 'nullable|url',
         ]);
 
@@ -167,5 +167,33 @@ class PortofolioController extends Controller
         $portofolio->delete();
 
         return redirect()->route('projek.index')->with('success', 'Data projek berhasil dihapus!');
+    }
+
+
+    public function swapUrutanAjax(Request $request)
+    {
+        $current = Portofolio::findOrFail($request->id);
+        $direction = $request->direction;
+
+        if ($direction === 'up') {
+            $neighbor = Portofolio::where('urutan', '<', $current->urutan)
+                ->orderBy('urutan', 'desc')->first();
+        } else {
+            $neighbor = Portofolio::where('urutan', '>', $current->urutan)
+                ->orderBy('urutan', 'asc')->first();
+        }
+
+        if ($neighbor) {
+            $temp = $current->urutan;
+            $current->urutan = $neighbor->urutan;
+            $neighbor->urutan = $temp;
+
+            $current->save();
+            $neighbor->save();
+
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Tidak bisa tukar urutan.']);
     }
 }

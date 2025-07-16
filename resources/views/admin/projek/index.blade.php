@@ -29,6 +29,7 @@
                                 <th>Bahasa</th>
                                 <th>Framework</th>
                                 <th>Link</th>
+                                <th>Urutan</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -79,35 +80,44 @@
                                     </td>
                                     <td>
                                         @php $bahasa = json_decode($item->bahasa_id, true); @endphp
-                                        <ul class="list-unstyled mb-0 d-flex flex-column gap-1">
-                                            @foreach ($bahasa as $id)
-                                                @php $bhs = $bahasas->where('id', $id)->first(); @endphp
-                                                @if ($bhs)
-                                                    <li class="d-flex align-items-center gap-2">
-                                                        <img src="{{ asset('storage/' . $bhs->gambar) }}"
-                                                            alt="{{ $bhs->nama }}" width="30" class="rounded">
-                                                        {{ $bhs->nama }}
-                                                    </li>
-                                                @endif
-                                            @endforeach
-                                        </ul>
+                                        @if (is_array($bahasa) && count($bahasa))
+                                            <ul class="list-unstyled mb-0 d-flex flex-column gap-1">
+                                                @foreach ($bahasa as $id)
+                                                    @php $bhs = $bahasas->where('id', $id)->first(); @endphp
+                                                    @if ($bhs)
+                                                        <li class="d-flex align-items-center gap-2">
+                                                            <img src="{{ asset('storage/' . $bhs->gambar) }}"
+                                                                alt="{{ $bhs->nama }}" width="30" class="rounded">
+                                                            {{ $bhs->nama }}
+                                                        </li>
+                                                    @endif
+                                                @endforeach
+                                            </ul>
+                                        @else
+                                            <small class="text-muted">-</small>
+                                        @endif
                                     </td>
 
                                     <td>
                                         @php $framework = json_decode($item->framework_id, true); @endphp
-                                        <ul class="list-unstyled mb-0 d-flex flex-column gap-1">
-                                            @foreach ($framework as $id)
-                                                @php $fw = $frameworks->where('id', $id)->first(); @endphp
-                                                @if ($fw)
-                                                    <li class="d-flex align-items-center gap-2">
-                                                        <img src="{{ asset('storage/' . $fw->gambar) }}"
-                                                            alt="{{ $fw->nama }}" width="30" class="rounded">
-                                                        {{ $fw->nama }}
-                                                    </li>
-                                                @endif
-                                            @endforeach
-                                        </ul>
+                                        @if (is_array($framework) && count($framework))
+                                            <ul class="list-unstyled mb-0 d-flex flex-column gap-1">
+                                                @foreach ($framework as $id)
+                                                    @php $fw = $frameworks->where('id', $id)->first(); @endphp
+                                                    @if ($fw)
+                                                        <li class="d-flex align-items-center gap-2">
+                                                            <img src="{{ asset('storage/' . $fw->gambar) }}"
+                                                                alt="{{ $fw->nama }}" width="30" class="rounded">
+                                                            {{ $fw->nama }}
+                                                        </li>
+                                                    @endif
+                                                @endforeach
+                                            </ul>
+                                        @else
+                                            <small class="text-muted">-</small>
+                                        @endif
                                     </td>
+
 
                                     <td>
                                         @if ($item->link)
@@ -117,7 +127,18 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <div class="d-flex justify-content-center gap-2">
+                                        <div class="d-flex justify-content-center gap-2 flex-wrap">
+                                            <button class="btn btn-sm btn-warning btn-urutan" data-id="{{ $item->id }}"
+                                                data-direction="up"><i class="bi bi-arrow-up"></i></button>
+
+                                            <button class="btn btn-sm btn-secondary btn-urutan"
+                                                data-id="{{ $item->id }}" data-direction="down"><i
+                                                    class="bi bi-arrow-down"></i></button>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex justify-content-center gap-2 flex-wrap">
+
                                             <a href="{{ route('projek.edit', $item->id) }}"
                                                 class="btn btn-sm btn-primary">Edit</a>
                                             <form action="{{ route('projek.destroy', $item->id) }}" method="POST"
@@ -128,6 +149,7 @@
                                             </form>
                                         </div>
                                     </td>
+
 
                                 </tr>
                             @endforeach
@@ -155,6 +177,34 @@
             setTimeout(() => {
                 $('.alert-dismissible').fadeOut('slow');
             }, 3000);
+        });
+    </script>
+    <script>
+        $(document).on('click', '.btn-urutan', function() {
+            let id = $(this).data('id');
+            let direction = $(this).data('direction');
+
+            $.ajax({
+                url: '{{ route('portofolio.swapUrutanAjax') }}',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    id: id,
+                    direction: direction
+                },
+                success: function(res) {
+                    if (res.success) {
+                        // reload hanya isi table
+                        $('#projekTable').load(location.href + " #projekTable > *");
+                    } else {
+                        alert(res.message || 'Gagal tukar urutan.');
+                    }
+                },
+                error: function(xhr) {
+                    console.error(xhr.responseText);
+                    alert('Terjadi error AJAX.');
+                }
+            });
         });
     </script>
 @endpush

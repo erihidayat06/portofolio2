@@ -26,6 +26,7 @@ Route::get('/', [HomeController::class, 'index']);
 
 
 
+
 Route::get('/admin', [ProfilWebController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('admin.dashboard');
@@ -39,6 +40,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('/admin/projek', PortofolioController::class)->parameters([
         'projek' => 'portofolio',
     ]);
+    Route::post('/portofolio/urutan/swap', [PortofolioController::class, 'swapUrutanAjax'])->name('portofolio.swapUrutanAjax');
+
+
     Route::resource('/admin/bahasa', BahasaController::class);
     Route::resource('/admin/framework', FrameworkController::class);
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

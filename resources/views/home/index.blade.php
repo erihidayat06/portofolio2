@@ -165,29 +165,29 @@
                                 <div class="pt-2 text-white">{!! $portofolio->deskripsi !!}</div>
 
                                 @php $bahasa = json_decode($portofolio->bahasa_id, true); @endphp
-                                @if ($bahasa)
+                                @if (is_array($bahasa) && count($bahasa))
                                     <h5 class="fw-bold mt-3 text-main">Bahasa Pemprograman</h5>
+                                    @foreach ($bahasa as $id)
+                                        @php $bhs = $bahasas->where('id', $id)->first(); @endphp
+                                        @if ($bhs)
+                                            <img src="{{ asset('storage/' . $bhs->gambar) }}" alt="{{ $bhs->nama }}"
+                                                height="30" class="rounded">
+                                        @endif
+                                    @endforeach
                                 @endif
 
-                                @foreach ($bahasa as $id)
-                                    @php $bhs = $bahasas->where('id', $id)->first(); @endphp
-                                    @if ($bhs)
-                                        <img src="{{ asset('storage/' . $bhs->gambar) }}" alt="{{ $bhs->nama }}"
-                                            height="30" class="rounded">
-                                    @endif
-                                @endforeach
                                 @php $framework = json_decode($portofolio->framework_id, true); @endphp
-                                @if ($framework)
+                                @if (is_array($framework) && count($framework))
                                     <h5 class="fw-bold mt-3 text-main">Framework</h5>
+                                    @foreach ($framework as $id)
+                                        @php $frame = $frameworks->where('id', $id)->first(); @endphp
+                                        @if ($frame)
+                                            <img src="{{ asset('storage/' . $frame->gambar) }}"
+                                                alt="{{ $frame->nama }}" height="30" class="rounded">
+                                        @endif
+                                    @endforeach
                                 @endif
 
-                                @foreach ($framework as $id)
-                                    @php $frame = $frameworks->where('id', $id)->first(); @endphp
-                                    @if ($frame)
-                                        <img src="{{ asset('storage/' . $frame->gambar) }}" alt="{{ $frame->nama }}"
-                                            height="30" class="rounded">
-                                    @endif
-                                @endforeach
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
@@ -335,29 +335,29 @@
                         <div class="pt-2 text-white">{!! $portofolio->deskripsi !!}</div>
 
                         @php $bahasa = json_decode($portofolio->bahasa_id, true); @endphp
-                        @if ($bahasa)
+                        @if (is_array($bahasa) && count($bahasa))
                             <h5 class="fw-bold mt-3 text-main">Bahasa Pemprograman</h5>
+                            @foreach ($bahasa as $id)
+                                @php $bhs = $bahasas->where('id', $id)->first(); @endphp
+                                @if ($bhs)
+                                    <img src="{{ asset('storage/' . $bhs->gambar) }}" alt="{{ $bhs->nama }}"
+                                        height="30" class="rounded">
+                                @endif
+                            @endforeach
                         @endif
 
-                        @foreach ($bahasa as $id)
-                            @php $bhs = $bahasas->where('id', $id)->first(); @endphp
-                            @if ($bhs)
-                                <img src="{{ asset('storage/' . $bhs->gambar) }}" alt="{{ $bhs->nama }}"
-                                    height="30" class="rounded">
-                            @endif
-                        @endforeach
                         @php $framework = json_decode($portofolio->framework_id, true); @endphp
-                        @if ($framework)
+                        @if (is_array($framework) && count($framework))
                             <h5 class="fw-bold mt-3 text-main">Framework</h5>
+                            @foreach ($framework as $id)
+                                @php $frame = $frameworks->where('id', $id)->first(); @endphp
+                                @if ($frame)
+                                    <img src="{{ asset('storage/' . $frame->gambar) }}" alt="{{ $frame->nama }}"
+                                        height="30" class="rounded">
+                                @endif
+                            @endforeach
                         @endif
 
-                        @foreach ($framework as $id)
-                            @php $frame = $frameworks->where('id', $id)->first(); @endphp
-                            @if ($frame)
-                                <img src="{{ asset('storage/' . $frame->gambar) }}" alt="{{ $frame->nama }}"
-                                    height="30" class="rounded">
-                            @endif
-                        @endforeach
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
