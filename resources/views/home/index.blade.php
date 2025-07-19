@@ -197,6 +197,8 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                <a href="{{ $portofolio->link }}" type="button" class="btn btn-warning"
+                                    data-bs-dismiss="modal">Lihat projek</a>
                             </div>
                         </div>
                     </div>
@@ -367,6 +369,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                        <a href="{{ $portofolio->link }}" type="button" class="btn btn-warning"
+                            data-bs-dismiss="modal">Lihat projek</a>
                     </div>
                 </div>
             </div>
