@@ -56,6 +56,9 @@ class PortofolioController extends Controller
             }
         }
 
+        // Ambil urutan tertinggi dan tambah 1
+        $maxUrutan = Portofolio::max('urutan') ?? 0;
+
         // Simpan data projek
         $projek = Portofolio::create([
             'nm_projek' => $request->nm_projek,
@@ -64,10 +67,12 @@ class PortofolioController extends Controller
             'bahasa_id' => json_encode($request->bahasa_id),
             'framework_id' => json_encode($request->framework_id),
             'link' => $request->link,
+            'urutan' => $maxUrutan + 1,
         ]);
 
         return redirect()->route('projek.index')->with('success', 'Portofolio berhasil ditambahkan.');
     }
+
 
     /**
      * Display the specified resource.
