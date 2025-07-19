@@ -14,18 +14,20 @@
     </nav>
     <div class="container">
         <div class="row row-cols-1 row-cols-lg-2 g-1 g-lg-2 mt-5">
-            <div class="col">
-                <h1 style="margin-top: 150px" class="fw-bold">
+            <div class="col" data-aos="fade-up" data-aos-duration="1000">
+                <h1 data-aos="fade-up" data-aos-duration="500" style="margin-top: 150px" class="fw-bold">
                     {{ strtoupper($profilWeb->judul ?? 'PORTOFOLIO') }}
                 </h1>
                 <p class="text-white fs-5">
-                <div style="color: #fff !important">{!! $profilWeb->deskripsi !!}</div>
+                <div data-aos="fade-up" data-aos-duration="500" style="color: #fff !important">{!! $profilWeb->deskripsi !!}
+                </div>
                 </p>
 
 
 
                 @if ($profilWeb->cv)
-                    <a class="mt-5 text-white fw-bold" target="_blank" href="{{ asset('storage/' . $profilWeb->cv) }}">
+                    <a data-aos="fade-up" data-aos-duration="3000" class="mt-5 text-white fw-bold" target="_blank"
+                        href="{{ asset('storage/' . $profilWeb->cv) }}">
                         CV
                     </a>
                 @endif
@@ -44,7 +46,7 @@
                 </div>
             </div>
 
-            <div class="col d-none d-lg-block">
+            <div class="col d-none d-lg-block" data-aos="zoom-in" data-aos-duration="2000">
                 <div style="margin-top: 100px">
                     <div class="bulat"></div>
                     <img class="foto shadow" src="/assets/img/foto.png" alt="Foto Desktop" />
@@ -55,8 +57,10 @@
         <!-- Profil -->
         <div id="profil"></div>
         <div class="profil text-center">
-            <h1>Profil</h1>
-            <p>{!! $profilWeb->deskripsi_profil ?? 'Deskripsi profil belum tersedia.' !!}</p>
+            <h1 data-aos="fade-up">Profil</h1>
+            <p>
+            <div data-aos="fade-up">{!! $profilWeb->deskripsi_profil ?? 'Deskripsi profil belum tersedia.' !!}</div>
+            </p>
         </div>
     </div>
 
@@ -68,11 +72,11 @@
     <div id="project"></div>
 
     <div class="project container">
-        <h1 class="text-center mb-5">Project</h1>
+        <h1 class="text-center mb-5" data-aos="fade-up">Project</h1>
 
         <div class="row row-cols-1 row-cols-md-4 g-4">
-            @foreach ($portofolios->take(4) as $portofolio)
-                <div class="col">
+            @foreach ($portofolios->take(4) as $index => $portofolio)
+                <div class="col" data-aos="fade-up" data-aos-delay="{{ $index * 100 }}">
                     <div class="card h-100" data-bs-toggle="modal" data-bs-target="#projekModalUtama{{ $portofolio->id }}"
                         style="cursor: pointer">
                         @php $imgs = json_decode($portofolio->gambar, true); @endphp
@@ -138,12 +142,14 @@
 
                                         @if (count($gambars) > 1)
                                             <button class="carousel-control-prev" type="button"
-                                                data-bs-target="#carouselGambar{{ $portofolio->id }}" data-bs-slide="prev">
+                                                data-bs-target="#carouselGambar{{ $portofolio->id }}"
+                                                data-bs-slide="prev">
                                                 <span class="carousel-control-prev-icon"></span>
                                                 <span class="visually-hidden">Sebelumnya</span>
                                             </button>
                                             <button class="carousel-control-next" type="button"
-                                                data-bs-target="#carouselGambar{{ $portofolio->id }}" data-bs-slide="next">
+                                                data-bs-target="#carouselGambar{{ $portofolio->id }}"
+                                                data-bs-slide="next">
                                                 <span class="carousel-control-next-icon"></span>
                                                 <span class="visually-hidden">Berikutnya</span>
                                             </button>
@@ -385,29 +391,36 @@
 
     <!-- Contact -->
     <div id="contact"></div>
-    <div style="margin-bottom: 200px" class="contact text-center">
+    <div style="margin-bottom: 200px" class="contact text-center" data-aos="fade-up">
         <h1>Contact</h1>
 
         <div class="d-flex justify-content-center">
             <div class="row mt-5">
+                @php $delay = 0; @endphp
+
                 @if ($profilWeb->instagram)
-                    <div style="margin: 0 30px" class="col fs-1">
+                    <div style="margin: 0 30px" class="col fs-1" data-aos="fade-up"
+                        data-aos-delay="{{ $delay }}">
                         <a href="{{ $profilWeb->instagram }}" class="text-white" target="_blank">
                             <i class="bi bi-instagram"></i>
                         </a>
                     </div>
+                    @php $delay += 100; @endphp
                 @endif
 
                 @if ($profilWeb->youtube)
-                    <div style="margin: 0 30px" class="col fs-1">
+                    <div style="margin: 0 30px" class="col fs-1" data-aos="fade-up"
+                        data-aos-delay="{{ $delay }}">
                         <a href="{{ $profilWeb->youtube }}" class="text-white" target="_blank">
                             <i class="bi bi-youtube"></i>
                         </a>
                     </div>
+                    @php $delay += 100; @endphp
                 @endif
 
                 @if ($profilWeb->tiktok)
-                    <div style="margin: 0 30px" class="col fs-1">
+                    <div style="margin: 0 30px" class="col fs-1" data-aos="fade-up"
+                        data-aos-delay="{{ $delay }}">
                         <a href="{{ $profilWeb->tiktok }}" class="text-white" target="_blank">
                             <i class="bi bi-tiktok"></i>
                         </a>
