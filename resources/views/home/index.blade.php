@@ -106,7 +106,7 @@
                 <!-- Modal -->
                 <div class="modal fade" id="projekModalUtama{{ $portofolio->id }}" tabindex="-1"
                     aria-labelledby="projekModalUtama{{ $portofolio->id }}Label" aria-hidden="true">
-                    <div class="modal-dialog modal-fullscreen-sm-down">
+                    <div class="modal-dialog ">
                         <div class="modal-content" style="background-color: #191d88">
                             <div class="modal-header">
                                 <h1 class="modal-title fs-5" id="projekModalUtama{{ $portofolio->id }}Label">
@@ -197,8 +197,8 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                                <a href="{{ $portofolio->link }}" type="button" class="btn btn-warning"
-                                    data-bs-dismiss="modal">Lihat projek</a>
+                                <a href="{{ $portofolio->link }}" class="btn btn-warning">Lihat
+                                    projek</a>
                             </div>
                         </div>
                     </div>
@@ -369,8 +369,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                        <a href="{{ $portofolio->link }}" type="button" class="btn btn-warning"
-                            data-bs-dismiss="modal">Lihat projek</a>
+                        <a href="{{ $portofolio->link }}" class="btn btn-warning">Lihat projek</a>
                     </div>
                 </div>
             </div>
