@@ -19,7 +19,8 @@
     <div class="container mt-5">
         <div class="col-md-6 mx-auto text-center">
             <div class="card shadow-lg p-4">
-                <h5 class="card-title mb-4 fw-bold">Subscribe untuk membuka link</h5>
+                <h4 class="card-title  fw-bold">{{ $shareLink->nama }}</h4>
+                <h6 class="card-title mb-4 fw-bold">Subscribe untuk membuka link</h6>
 
                 <!-- Tombol Subscribe (gembok) -->
                 <a href="https://www.youtube.com/channel/UC0bcUTL31f_vC-EzZo-rzjA?sub_confirmation=1" target="_blank"
