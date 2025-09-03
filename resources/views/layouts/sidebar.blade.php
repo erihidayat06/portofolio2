@@ -34,6 +34,20 @@
              </a>
          </li><!-- End Dashboard Nav -->
 
+         <li class="nav-heading">Share link</li>
+         <li class="nav-item">
+             <a class="nav-link {{ Request::is('admin/share-link*') ? '' : 'collapsed' }}" href="/admin/share-link">
+                 <i class="bi bi-card-list"></i>
+                 <span>Link</span>
+             </a>
+         </li><!-- End Dashboard Nav -->
+         <li class="nav-item">
+             <a class="nav-link {{ Request::is('admin/affiliate*') ? '' : 'collapsed' }}" href="/admin/affiliate">
+                 <i class="bi bi-card-list"></i>
+                 <span>Link Affiliate</span>
+             </a>
+         </li><!-- End Dashboard Nav -->
+
 
 
      </ul>

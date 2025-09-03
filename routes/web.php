@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AffiliateController;
 use App\Models\Bahasa;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BahasaController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\FrameworkController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\ProfilWebController;
 use App\Http\Controllers\PortofolioController;
+use App\Http\Controllers\ShareLinkController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +23,7 @@ use App\Http\Controllers\PortofolioController;
 */
 
 Route::get('/', [HomeController::class, 'index']);
+Route::get('/share/{shareLink:slug}', [ShareLinkController::class, 'show']);
 
 
 
@@ -43,6 +46,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/portofolio/urutan/swap', [PortofolioController::class, 'swapUrutanAjax'])->name('portofolio.swapUrutanAjax');
 
 
+    Route::resource('/admin/share-link', ShareLinkController::class);
+
+    Route::resource('/admin/affiliate', AffiliateController::class);
     Route::resource('/admin/bahasa', BahasaController::class);
     Route::resource('/admin/framework', FrameworkController::class);
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
