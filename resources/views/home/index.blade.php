@@ -106,7 +106,8 @@
                         <div class="card h-100 openProject" style="cursor: pointer" data-bs-toggle="modal"
                             data-bs-target="#projectModal" data-title="{{ $portofolio->nm_projek }}"
                             data-link="{{ $portofolio->link }}" data-images="{{ $portofolio->gambar }}"
-                            data-bahasa="{{ $portofolio->bahasa_id }}" data-framework="{{ $portofolio->framework_id }}"
+                            data-bahasa="{{ json_encode($portofolio->bahasa_id) }}"
+                            data-framework="{{ json_encode($portofolio->framework_id) }}"
                             data-desc='{!! json_encode($portofolio->deskripsi) !!}'>
 
                             @if ($imgs && count($imgs))
@@ -236,9 +237,9 @@
                                 <div class="card h-100 openProjekLain" data-bs-toggle="modal"
                                     data-bs-target="#projekModalLainnya" data-title="{{ $portofolio->nm_projek }}"
                                     data-link="{{ $portofolio->link }}" data-images="{{ $portofolio->gambar }}"
-                                    data-bahasa="{{ $portofolio->bahasa_id }}"
-                                    data-framework="{{ $portofolio->framework_id }}" data-desc='{!! json_encode($portofolio->deskripsi) !!}'
-                                    style="cursor: pointer">
+                                    data-bahasa="{{ json_encode($portofolio->bahasa_id) }}"
+                                    data-framework="{{ json_encode($portofolio->framework_id) }}"
+                                    data-desc='{!! json_encode($portofolio->deskripsi) !!}' style="cursor: pointer">
 
                                     @if ($imgs && count($imgs))
                                         <img src="{{ asset('storage/' . $imgs[0]) }}" alt="gambar" height="150px"
@@ -353,8 +354,8 @@
                 const bahasaIds = JSON.parse(this.dataset.bahasa || '[]');
                 const frameIds = JSON.parse(this.dataset.framework || '[]');
 
-                const semuaBahasa = @json($bahasas);
-                const semuaFrame = @json($frameworks);
+                const semuaBahasa = @json($portofolio->bahasas());
+                const semuaFrame = @json($portofolio->frameworks());
 
                 // Update basic info
                 document.getElementById('modalLainTitle').innerText = title;
@@ -556,8 +557,8 @@
                 const bahasaIds = JSON.parse(this.dataset.bahasa || '[]');
                 const frameIds = JSON.parse(this.dataset.framework || '[]');
 
-                const semuaBahasa = @json($bahasas);
-                const semuaFrame = @json($frameworks);
+                const semuaBahasa = @json($portofolio->bahasas());
+                const semuaFrame = @json($portofolio->frameworks());
 
                 // Update basic info
                 document.getElementById('modalTitle').innerHTML = title;
