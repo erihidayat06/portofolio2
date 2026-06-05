@@ -4,12 +4,16 @@ use App\Http\Controllers\AffiliateController;
 use App\Models\Bahasa;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BahasaController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FrameworkController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\ProfilWebController;
 use App\Http\Controllers\PortofolioController;
 use App\Http\Controllers\ShareLinkController;
+use App\Models\Portofolio;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Laravel\Facades\Image;
 
 /*
 |--------------------------------------------------------------------------

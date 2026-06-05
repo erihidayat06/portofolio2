@@ -7,6 +7,7 @@ use App\Models\Framework;
 use App\Models\Portofolio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Laravel\Facades\Image;
 
 class PortofolioController extends Controller
 {
@@ -49,9 +50,24 @@ class PortofolioController extends Controller
 
         // Simpan gambar ke storage
         $gambarPaths = [];
+        // Di dalam fungsi store()
         if ($request->hasFile('gambar')) {
             foreach ($request->file('gambar') as $gambar) {
-                $path = $gambar->store('projek_gambar', 'public');
+                // 1. Buat nama file dengan ekstensi .webp
+                $filename = time() . '_' . uniqid() . '.webp';
+
+                // 2. Baca gambar
+                $img = Image::read($gambar);
+
+                // 3. Resize (opsional) dan kompres ke WebP
+                // Quality 70 adalah angka yang ideal (0-100)
+                $img->scale(width: 800);
+                $encoded = $img->toWebp(quality: 70);
+
+                // 4. Simpan ke storage
+                $path = 'projek_gambar/' . $filename;
+                Storage::disk('public')->put($path, (string) $encoded);
+
                 $gambarPaths[] = $path;
             }
         }
@@ -82,9 +98,6 @@ class PortofolioController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Portofolio $portofolio)
     {
         $bahasas = Bahasa::all();        // Ambil semua bahasa
@@ -98,49 +111,48 @@ class PortofolioController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Show the form for editing the specified resource.
      */
     public function update(Request $request, Portofolio $portofolio)
     {
         $request->validate([
             'nm_projek' => 'required|string|max:255',
-            'gambar.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gambar.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
             'deskripsi' => 'nullable|string',
-            'bahasa_id' => 'nullable|array|min:1',
-            'framework_id' => 'nullable|array|min:1',
-            'link' => 'nullable|url',
         ]);
 
-        // Ambil gambar lama dari input (bentuk array string path)
+        // 1. Ambil gambar lama dari database
+        $gambarTersimpan = json_decode($portofolio->gambar ?? '[]', true);
         $gambarLama = $request->input('gambar_lama', []);
 
-        // Ambil gambar sebelumnya yang disimpan di DB
-        $gambarTersimpan = json_decode($portofolio->gambar ?? '[]', true);
-
-        // Hapus gambar yang tidak dipertahankan
+        // 2. Hapus gambar dari storage yang tidak ada di input "gambar_lama"
         foreach ($gambarTersimpan as $img) {
             if (!in_array($img, $gambarLama)) {
                 Storage::disk('public')->delete($img);
             }
         }
 
-        // Inisialisasi array final dari gambar yang dipertahankan
+        // 3. Mulai dengan gambar yang dipertahankan
         $finalGambar = $gambarLama;
 
-        // Simpan gambar baru jika ada
+        // 4. Proses gambar baru (jika ada) ke format WebP
         if ($request->hasFile('gambar')) {
             foreach ($request->file('gambar') as $file) {
-                $path = $file->store('projek', 'public');
+                $filename = time() . '_' . uniqid() . '.webp';
+
+                // Baca file dan konversi ke WebP
+                $img = Image::read($file);
+                $img->scale(width: 800);
+                $encoded = $img->toWebp(quality: 70);
+
+                $path = 'projek/' . $filename;
+                Storage::disk('public')->put($path, (string) $encoded);
+
                 $finalGambar[] = $path;
             }
         }
 
-        // Validasi total gambar maksimal 5
-        if (count($finalGambar) > 5) {
-            return back()->withErrors(['gambar' => 'Maksimal 5 gambar yang diperbolehkan.'])->withInput();
-        }
-
-        // Update ke database
+        // 5. Update ke database
         $portofolio->update([
             'nm_projek' => $request->nm_projek,
             'gambar' => json_encode($finalGambar),
@@ -150,7 +162,7 @@ class PortofolioController extends Controller
             'link' => $request->link,
         ]);
 
-        return redirect()->route('projek.index')->with('success', 'Projek berhasil diperbarui!');
+        return redirect()->route('projek.index')->with('success', 'Projek berhasil diperbarui dengan gambar WebP!');
     }
 
 

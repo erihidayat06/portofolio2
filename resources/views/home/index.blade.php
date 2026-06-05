@@ -1,5 +1,28 @@
 @extends('home.layouts.main')
 @section('content')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <style>
+        #chat-response ul {
+            padding-left: 20px;
+            /* Memberi jarak list ke kanan */
+            margin: 5px 0;
+        }
+
+        #chat-response li {
+            margin-bottom: 5px;
+            /* Jarak antar proyek */
+        }
+
+        #chat-response strong {
+            color: #0d6efd;
+            /* Memberi warna pada teks bold agar menonjol */
+        }
+
+        .chat-window-open {
+            display: flex !important;
+        }
+    </style>
+
     <nav class="navbar navbar-expand-lg bg-main fixed-top" id="mainNav">
         <div class="container">
             <div class="navbar-collapse float-end" id="navbarNavAltMarkup">
@@ -19,20 +42,20 @@
                     {{ strtoupper($profilWeb->judul ?? 'PORTOFOLIO') }}
                 </h1>
                 <p class="text-white fs-5">
-                <div data-aos="fade-up" data-aos-duration="500" style="color: #fff !important">{!! $profilWeb->deskripsi !!}
+                <div data-aos="fade-up" data-aos-duration="500" style="color: #fff !important">{!! $profilWeb->deskripsi ?? '' !!}
                 </div>
                 </p>
 
 
 
-                @if ($profilWeb->cv)
+                @if (isset($profilWeb->cv))
                     <a data-aos="fade-up" data-aos-duration="3000" class="mt-5 text-white fw-bold" target="_blank"
                         href="{{ asset('storage/' . $profilWeb->cv) }}">
                         CV
                     </a>
                 @endif
 
-                @if ($profilWeb->sertifikat)
+                @if (isset($profilWeb->sertifikat))
                     <a class="mt-5 ms-3 text-white fw-bold" target="_blank" href="{{ $profilWeb->sertifikat }}">
                         <i class="bi bi-file-earmark-text-fill"></i> Sertifikat
                     </a>
@@ -56,6 +79,7 @@
 
         <!-- Profil -->
         <div id="profil"></div>
+
         <div class="profil text-center">
             <h1 data-aos="fade-up">Profil</h1>
             <p>
@@ -277,6 +301,8 @@
             </div>
         </div>
     </div>
+
+
     @foreach ($portofolios->skip(4) as $portofolio)
         <!-- Modal -->
         <div class="modal fade" id="projekModal{{ $portofolio->id }}" tabindex="-1"
@@ -401,7 +427,7 @@
             <div class="row mt-5">
                 @php $delay = 0; @endphp
 
-                @if ($profilWeb->instagram)
+                @if (isset($profilWeb->instagram))
                     <div style="margin: 0 30px" class="col fs-1" data-aos="fade-up"
                         data-aos-delay="{{ $delay }}">
                         <a href="{{ $profilWeb->instagram }}" class="text-white" target="_blank">
@@ -411,7 +437,7 @@
                     @php $delay += 100; @endphp
                 @endif
 
-                @if ($profilWeb->youtube)
+                @if (isset($profilWeb->youtube))
                     <div style="margin: 0 30px" class="col fs-1" data-aos="fade-up"
                         data-aos-delay="{{ $delay }}">
                         <a href="{{ $profilWeb->youtube }}" class="text-white" target="_blank">
@@ -421,7 +447,7 @@
                     @php $delay += 100; @endphp
                 @endif
 
-                @if ($profilWeb->tiktok)
+                @if (isset($profilWeb->tiktok))
                     <div style="margin: 0 30px" class="col fs-1" data-aos="fade-up"
                         data-aos-delay="{{ $delay }}">
                         <a href="{{ $profilWeb->tiktok }}" class="text-white" target="_blank">
@@ -432,10 +458,197 @@
             </div>
         </div>
     </div>
+    <div id="chat-widget" style="position: fixed; bottom: 25px; right: 25px; z-index: 9999;">
 
+        <div id="chat-widget" style="position: fixed; bottom: 25px; right: 25px; z-index: 9999;">
+
+            <div id="chat-alert" class="alert alert-primary shadow-sm p-2 px-3 animate__animated animate__fadeInUp"
+                style="position: absolute; bottom: 70px; right: 0; width: 220px; border-radius: 20px; font-size: 12px; cursor: pointer; display: none; white-space: nowrap;">
+                <span class="d-flex align-items-center">
+                    👋 Ada yang ingin ditanyakan?
+                    <i class="bi bi-x-circle ms-auto" onclick="closeAlert(event)"></i>
+                </span>
+            </div>
+
+            <button id="toggle-chat" class="btn btn-primary rounded-circle shadow-lg" style="width: 60px; height: 60px;">
+                <i class="bi bi-chat-dots-fill fs-4"></i>
+            </button>
+        </div>
+
+        <!-- Ubah bagian ini -->
+        <div id="chat-window" class="card shadow-lg border-0"
+            style="display: none; width: 350px; height: 500px; position: fixed; bottom: 100px; right: 25px; flex-direction: column;">
+            <!-- Header dengan tombol minimize -->
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <span>Asisten AI</span>
+                <button onclick="toggleSize()" class="btn btn-sm btn-light">⇱</button>
+            </div>
+
+            <!-- Area Chat (Pesan muncul di sini) -->
+            <div id="chat-messages" class="card-body overflow-auto" style="flex-grow: 1;">
+                <!-- Pesan akan masuk ke sini -->
+            </div>
+
+            <!-- Input Area -->
+            <div class="card-footer">
+                <input type="text" id="user-input" class="form-control" placeholder="Tanya sesuatu...">
+                <button onclick="sendMessage()" class="btn btn-primary mt-2 w-100">Kirim</button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Container utama pesan */
+        #chat-messages {
+            padding: 15px;
+            background-color: #f8f9fa;
+            /* Warna latar belakang area chat */
+        }
+
+        /* Style Bubble Chat */
+        .chat-bubble {
+            padding: 10px 15px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            max-width: 85%;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        /* Style Pesan User (Kanan) */
+        .user-msg {
+            background-color: #0d6efd;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+
+        /* Style Pesan AI (Kiri) */
+        .ai-msg {
+            background-color: #e9ecef;
+            color: #333;
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+        }
+    </style>
 
     <!-- End Container -->
-    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatAlert = document.getElementById('chat-alert');
+            const toggleBtn = document.getElementById('toggle-chat');
+            const chatWindow = document.getElementById('chat-window');
+            const notificationSound = new Audio('/assets/audio/notification.mp3');
+
+            // Fungsi putar yang mencoba memutar audio
+            const playSound = () => {
+                notificationSound.play().catch(e => {
+                    console.warn("Autoplay diblokir, menunggu interaksi user...");
+                });
+            };
+
+            // KUNCI: Pemicu suara harus melalui event user (Click/Touch)
+            // Kita pasang ini agar begitu user menyentuh layar/klik,
+            // suara langsung siap digunakan untuk notifikasi
+            const enableAudio = () => {
+                notificationSound.play().then(() => {
+                    notificationSound.pause();
+                    notificationSound.currentTime = 0;
+                    document.removeEventListener('click', enableAudio);
+                    document.removeEventListener('touchstart', enableAudio);
+                }).catch(() => {});
+            };
+
+            document.addEventListener('click', enableAudio);
+            document.addEventListener('touchstart', enableAudio);
+
+            // 1. Logika Notifikasi Alert
+            setTimeout(() => {
+                chatAlert.style.display = 'block';
+                playSound(); // Suara akan bunyi jika user sudah klik/sentuh layar
+            }, 1000);
+
+            setTimeout(() => {
+                chatAlert.style.display = 'none';
+            }, 6000);
+
+            // 2. Fungsi Tutup Alert Manual
+            window.closeAlert = function(e) {
+                e.stopPropagation();
+                chatAlert.style.display = 'none';
+            };
+
+            // 3. Toggle Chat
+            // 3. Toggle Chat (Perbaikan Logika)
+            toggleBtn.addEventListener('click', () => {
+                // Gunakan style.display = '' agar mengikuti pengaturan CSS atau inline yang benar
+                if (chatWindow.style.display === 'none') {
+                    chatWindow.style.display = 'flex';
+                } else {
+                    chatWindow.style.display = 'none';
+                }
+                chatAlert.style.display = 'none';
+            });
+        });
+
+        // Variabel untuk state ukuran
+        let isLarge = false;
+
+        function toggleSize() {
+            const win = document.getElementById('chat-window');
+            isLarge = !isLarge;
+            win.style.width = isLarge ? '90vw' : '350px';
+            win.style.height = isLarge ? '90vh' : '500px';
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('user-input');
+            const msgContainer = document.getElementById('chat-messages');
+
+            if (!input.value.trim()) return;
+
+            // 1. Tampilkan pesan user dengan class 'chat-bubble user-msg'
+            msgContainer.innerHTML += `<div class="chat-bubble user-msg ms-auto"><b>Anda:</b><br>${input.value}</div>`;
+
+            const tempId = 'loading-' + Date.now();
+            // Tampilkan loading dengan class 'chat-bubble ai-msg'
+            msgContainer.innerHTML +=
+                `<div id="${tempId}" class="chat-bubble ai-msg"><em>AI sedang mengetik...</em></div>`;
+
+            const message = input.value;
+            input.value = '';
+            msgContainer.scrollTop = msgContainer.scrollHeight;
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({
+                        message
+                    })
+                });
+
+                const data = await response.json();
+
+                // 2. Ganti isi loading dengan class 'chat-bubble ai-msg'
+                const aiResponse = document.getElementById(tempId);
+                aiResponse.classList.remove('ai-msg'); // Reset jika perlu
+                aiResponse.innerHTML = `<div><b>AI:</b><br>${marked.parse(data.reply)}</div>`;
+                aiResponse.classList.add('chat-bubble', 'ai-msg');
+
+                msgContainer.scrollTop = msgContainer.scrollHeight;
+            } catch (error) {
+                document.getElementById(tempId).innerHTML = "Maaf, terjadi kesalahan.";
+            }
+        }
+    </script>
+
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
