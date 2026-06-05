@@ -16,10 +16,10 @@ class HomeController extends Controller
     {
 
         $portofolios = Portofolio::orderBy('urutan', 'asc')->get();
-
+        $profilWeb = ProfilWeb::get()->first();
         return view('home.index', [
             'portofolios' => $portofolios,
-
+            'profilWeb' => $profilWeb,
         ]);
     }
 }
