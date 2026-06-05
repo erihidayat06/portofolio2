@@ -128,9 +128,9 @@
                 </div>
 
                 <!-- Modal -->
-                <div class="modal fade" id="projekModalUtama{{ $portofolio->id }}" tabindex="-1"
-                    aria-labelledby="projekModalUtama{{ $portofolio->id }}Label" aria-hidden="true">
-                    <div class="modal-dialog ">
+                <div class="modal fade p-0 m-0" style="z-index: 99999" id="projekModalUtama{{ $portofolio->id }}"
+                    tabindex="-1" aria-labelledby="projekModalUtama{{ $portofolio->id }}Label" aria-hidden="true">
+                    <div class="modal-dialog modal-fullscreen-sm-down">
                         <div class="modal-content" style="background-color: #191d88">
                             <div class="modal-header">
                                 <h1 class="modal-title fs-5" id="projekModalUtama{{ $portofolio->id }}Label">
@@ -258,8 +258,8 @@
         </a>
     </div>
 
-    <div class="modal fade" id="projekLainToggle" aria-hidden="true" aria-labelledby="projekLainToggleLabel"
-        tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal fade" style="z-index: 99999" id="projekLainToggle" aria-hidden="true"
+        aria-labelledby="projekLainToggleLabel" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-fullscreen">
             <div class="modal-content">
                 <div class="modal-header modal-project">
@@ -305,9 +305,9 @@
 
     @foreach ($portofolios->skip(4) as $portofolio)
         <!-- Modal -->
-        <div class="modal fade" id="projekModal{{ $portofolio->id }}" tabindex="-1"
+        <div class="modal fade" style="z-index: 999999;" id="projekModal{{ $portofolio->id }}" tabindex="-1"
             aria-labelledby="projekModal{{ $portofolio->id }}Label" aria-hidden="true">
-            <div class="modal-dialog modal-fullscreen-sm-down">
+            <div class="modal-dialog modal-fullscreen-sm-down ">
                 <div class="modal-content" style="background-color: #191d88">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="projekModal{{ $portofolio->id }}Label">
@@ -477,7 +477,7 @@
 
         <!-- Ubah bagian ini -->
         <div id="chat-window" class="card shadow-lg border-0"
-            style="display: none; width: 350px; height: 500px; position: fixed; bottom: 100px; right: 25px; flex-direction: column;">
+            style="display: none; width: 350px; height: 450px; position: fixed; bottom: 100px; right: 25px; flex-direction: column;">
             <!-- Header dengan tombol minimize -->
             <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                 <span>Asisten AI</span>
@@ -600,7 +600,7 @@
             const win = document.getElementById('chat-window');
             isLarge = !isLarge;
             win.style.width = isLarge ? '90vw' : '350px';
-            win.style.height = isLarge ? '90vh' : '500px';
+            win.style.height = isLarge ? '85vh' : '450px';
         }
 
         async function sendMessage() {
