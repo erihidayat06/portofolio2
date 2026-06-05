@@ -135,8 +135,8 @@
 
 
                     <!-- Lightbox-style Preview -->
-                    <div id="lightbox" onclick="this.style.display='none'"
-                        style="display: none; position: fixed; z-index: 1056; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); align-items: center; justify-content: center;">
+                    <div id="lightbox" onclick="this.style.display='none'" class="m-0"
+                        style="display: none; position: fixed; z-index: 999999; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); align-items: center; justify-content: center;">
                         <img id="lightbox-img" src=""
                             style="max-width: 90vw; max-height: 90vh; border-radius: .5rem;">
                     </div>
