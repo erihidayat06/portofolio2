@@ -93,159 +93,121 @@
     <!-- End Profil -->
 
     <!-- Project -->
-    <div id="project"></div>
+    <div id="project">
+        <div class="project container">
+            <h1 class="text-center mb-5" data-aos="fade-up">Project</h1>
 
-    <div class="project container">
-        <h1 class="text-center mb-5" data-aos="fade-up">Project</h1>
+            <div class="row row-cols-1 row-cols-md-4 g-4">
+                @foreach ($portofolios->take(4) as $index => $portofolio)
+                    @php
+                        $imgs = json_decode($portofolio->gambar, true);
+                    @endphp
+                    <div class="col" data-aos="fade-up" data-aos-delay="{{ $index * 100 }}">
+                        <div class="card h-100 openProject" style="cursor: pointer" data-bs-toggle="modal"
+                            data-bs-target="#projectModal" data-title="{{ $portofolio->nm_projek }}"
+                            data-link="{{ $portofolio->link }}" data-images="{{ $portofolio->gambar }}"
+                            data-bahasa="{{ $portofolio->bahasa_id }}" data-framework="{{ $portofolio->framework_id }}"
+                            data-desc='{!! json_encode($portofolio->deskripsi) !!}'>
 
-        <div class="row row-cols-1 row-cols-md-4 g-4">
-            @foreach ($portofolios->take(4) as $index => $portofolio)
-                <div class="col" data-aos="fade-up" data-aos-delay="{{ $index * 100 }}">
-                    <div class="card h-100" data-bs-toggle="modal" data-bs-target="#projekModalUtama{{ $portofolio->id }}"
-                        style="cursor: pointer">
-                        @php $imgs = json_decode($portofolio->gambar, true); @endphp
-                        @if ($imgs && count($imgs))
-                            <img src="{{ asset('storage/' . $imgs[0]) }}" alt="gambar" height="150px"
-                                class="rounded-top w-100 object-fit-cover">
-                        @endif
-                        @php
-                            $deskripsi = Str::limit($portofolio->deskripsi, 50);
-                            $containsOpeningDiv = Str::contains($deskripsi, '<div');
-                            $containsClosingDiv = Str::contains($deskripsi, '</div>');
+                            @if ($imgs && count($imgs))
+                                <img src="{{ asset('storage/' . $imgs[0]) }}" alt="gambar" height="150px"
+                                    class="rounded-top w-100 object-fit-cover">
+                            @endif
+                            @php
+                                $deskripsi = Str::limit($portofolio->deskripsi, 50);
+                                $containsOpeningDiv = Str::contains($deskripsi, '<div');
+                                $containsClosingDiv = Str::contains($deskripsi, '</div>');
 
-                            if ($containsOpeningDiv && !$containsClosingDiv) {
-                                $deskripsi .= '</div>';
-                            }
-                        @endphp
-                        <div class="card-body">
-                            <h6 class="card-title fw-bold text-truncate">{{ $portofolio->nm_projek }}</h6>
-                            <p class="card-text">{!! $deskripsi !!}
+                                if ($containsOpeningDiv && !$containsClosingDiv) {
+                                    $deskripsi .= '</div>';
+                                }
+                            @endphp
+                            <div class="card-body">
+                                <h6 class="card-title fw-bold text-truncate">{{ $portofolio->nm_projek }}</h6>
+                                <p class="card-text">{!! $deskripsi !!}
 
-                            </p>
+                                </p>
 
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Modal -->
-                <div class="modal fade p-0 m-0" style="z-index: 99999" id="projekModalUtama{{ $portofolio->id }}"
-                    tabindex="-1" aria-labelledby="projekModalUtama{{ $portofolio->id }}Label" aria-hidden="true">
-                    <div class="modal-dialog modal-fullscreen-sm-down">
-                        <div class="modal-content" style="background-color: #191d88">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="projekModalUtama{{ $portofolio->id }}Label">
-                                    {{ $portofolio->nm_projek }}
-                                </h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Tutup"></button>
-                            </div>
-                            <div class="modal-body">
-                                @php $gambars = json_decode($portofolio->gambar, true); @endphp
-
-                                @if ($gambars && count($gambars))
-                                    {{-- Carousel Utama --}}
-                                    <div id="carouselGambar{{ $portofolio->id }}" class="carousel slide mb-3"
-                                        data-bs-ride="carousel">
-                                        <div class="carousel-inner rounded shadow-sm" style="height: 250px;">
-                                            @foreach ($gambars as $index => $img)
-                                                <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                                                    <div class="position-relative h-100">
-                                                        <img src="{{ asset('storage/' . $img) }}"
-                                                            class="d-block w-100 h-100 object-fit-cover rounded gambar-slide"
-                                                            alt="Slide {{ $index + 1 }}" style="cursor: zoom-in;"
-                                                            onclick="previewFull('{{ asset('storage/' . $img) }}')">
-
-                                                        <div
-                                                            class="position-absolute top-0 start-0 bg-dark bg-opacity-50 text-white px-2 py-1 small rounded-bottom-end">
-                                                            {{ $index + 1 }} / {{ count($gambars) }}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        </div>
-
-                                        @if (count($gambars) > 1)
-                                            <button class="carousel-control-prev" type="button"
-                                                data-bs-target="#carouselGambar{{ $portofolio->id }}"
-                                                data-bs-slide="prev">
-                                                <span class="carousel-control-prev-icon"></span>
-                                                <span class="visually-hidden">Sebelumnya</span>
-                                            </button>
-                                            <button class="carousel-control-next" type="button"
-                                                data-bs-target="#carouselGambar{{ $portofolio->id }}"
-                                                data-bs-slide="next">
-                                                <span class="carousel-control-next-icon"></span>
-                                                <span class="visually-hidden">Berikutnya</span>
-                                            </button>
-                                        @endif
-                                    </div>
-
-                                    {{-- Preview Thumbnail --}}
-                                    <div class="d-flex gap-2 flex-wrap justify-content-center mb-3">
-                                        @foreach ($gambars as $index => $img)
-                                            <img src="{{ asset('storage/' . $img) }}" class="rounded border shadow-sm"
-                                                style="width: 60px; height: 60px; object-fit: cover; cursor: pointer;"
-                                                onclick="bootstrap.Carousel.getInstance(document.querySelector('#carouselGambar{{ $portofolio->id }}')).to({{ $index }})"
-                                                alt="Preview {{ $index + 1 }}">
-                                        @endforeach
-                                    </div>
-                                @endif
-
-                                {{-- Deskripsi --}}
-                                <div class="pt-2 text-white">{!! $portofolio->deskripsi !!}</div>
-
-                                @php $bahasa = json_decode($portofolio->bahasa_id, true); @endphp
-                                @if (is_array($bahasa) && count($bahasa))
-                                    <h5 class="fw-bold mt-3 text-main">Bahasa Pemprograman</h5>
-                                    @foreach ($bahasa as $id)
-                                        @php $bhs = $bahasas->where('id', $id)->first(); @endphp
-                                        @if ($bhs)
-                                            <img src="{{ asset('storage/' . $bhs->gambar) }}" alt="{{ $bhs->nama }}"
-                                                height="30" class="rounded">
-                                        @endif
-                                    @endforeach
-                                @endif
-
-                                @php $framework = json_decode($portofolio->framework_id, true); @endphp
-                                @if (is_array($framework) && count($framework))
-                                    <h5 class="fw-bold mt-3 text-main">Framework</h5>
-                                    @foreach ($framework as $id)
-                                        @php $frame = $frameworks->where('id', $id)->first(); @endphp
-                                        @if ($frame)
-                                            <img src="{{ asset('storage/' . $frame->gambar) }}"
-                                                alt="{{ $frame->nama }}" height="30" class="rounded">
-                                        @endif
-                                    @endforeach
-                                @endif
-
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                                <a href="{{ $portofolio->link }}" class="btn btn-warning">Lihat
-                                    projek</a>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Lightbox-style Preview -->
-                <div id="lightbox" onclick="this.style.display='none'"
-                    style="display: none; position: fixed; z-index: 1056; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); align-items: center; justify-content: center;">
-                    <img id="lightbox-img" src=""
-                        style="max-width: 90vw; max-height: 90vh; border-radius: .5rem;">
-                </div>
 
-                <script>
-                    function previewFull(src) {
-                        const lightbox = document.getElementById('lightbox');
-                        const img = document.getElementById('lightbox-img');
-                        img.src = src;
-                        lightbox.style.display = 'flex';
-                    }
-                </script>
-            @endforeach
+                    <!-- Lightbox-style Preview -->
+                    <div id="lightbox" onclick="this.style.display='none'"
+                        style="display: none; position: fixed; z-index: 1056; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); align-items: center; justify-content: center;">
+                        <img id="lightbox-img" src=""
+                            style="max-width: 90vw; max-height: 90vh; border-radius: .5rem;">
+                    </div>
+
+                    <script>
+                        function previewFull(src) {
+                            const lightbox = document.getElementById('lightbox');
+                            const img = document.getElementById('lightbox-img');
+                            img.src = src;
+                            lightbox.style.display = 'flex';
+                        }
+                    </script>
+                @endforeach
+            </div>
         </div>
     </div>
+    <!-- SINGLE MODAL -->
+    <div class="modal fade p-0 m-0" style="z-index: 99999" id="projectModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen-sm-down">
+            <div class="modal-content" style="background-color: #191d88">
+
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalTitle"></h1>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <!-- Carousel -->
+                    <div id="modalCarousel" class="carousel slide mb-3" data-bs-ride="carousel">
+
+                        <div class="carousel-inner rounded shadow-sm" id="carouselInner" style="height:250px;">
+                        </div>
+
+                        <button class="carousel-control-prev" type="button" data-bs-target="#modalCarousel"
+                            data-bs-slide="prev">
+
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+
+                        <button class="carousel-control-next" type="button" data-bs-target="#modalCarousel"
+                            data-bs-slide="next">
+
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+                    </div>
+
+                    <!-- Thumbnail -->
+                    <div class="d-flex gap-2 flex-wrap justify-content-center mb-3" id="thumbnailContainer">
+                    </div>
+
+                    <!-- Description -->
+                    <div class="pt-2 text-white" id="modalDescription"></div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Tutup
+                    </button>
+
+                    <a href="" target="_blank" id="modalLink" class="btn btn-warning">
+                        Lihat projek
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 
 
 
@@ -269,10 +231,15 @@
                 <div class="modal-body modal-project">
                     <div class="row row-cols-1 row-cols-md-4 g-4">
                         @foreach ($portofolios->skip(4) as $portofolio)
+                            @php $imgs = json_decode($portofolio->gambar, true); @endphp
                             <div class="col">
-                                <div class="card h-100" data-bs-toggle="modal"
-                                    data-bs-target="#projekModal{{ $portofolio->id }}" style="cursor: pointer">
-                                    @php $imgs = json_decode($portofolio->gambar, true); @endphp
+                                <div class="card h-100 openProjekLain" data-bs-toggle="modal"
+                                    data-bs-target="#projekModalLainnya" data-title="{{ $portofolio->nm_projek }}"
+                                    data-link="{{ $portofolio->link }}" data-images="{{ $portofolio->gambar }}"
+                                    data-bahasa="{{ $portofolio->bahasa_id }}"
+                                    data-framework="{{ $portofolio->framework_id }}" data-desc='{!! json_encode($portofolio->deskripsi) !!}'
+                                    style="cursor: pointer">
+
                                     @if ($imgs && count($imgs))
                                         <img src="{{ asset('storage/' . $imgs[0]) }}" alt="gambar" height="150px"
                                             class="rounded-top w-100 object-fit-cover">
@@ -303,123 +270,165 @@
     </div>
 
 
-    @foreach ($portofolios->skip(4) as $portofolio)
-        <!-- Modal -->
-        <div class="modal fade" style="z-index: 999999;" id="projekModal{{ $portofolio->id }}" tabindex="-1"
-            aria-labelledby="projekModal{{ $portofolio->id }}Label" aria-hidden="true">
-            <div class="modal-dialog modal-fullscreen-sm-down ">
-                <div class="modal-content" style="background-color: #191d88">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="projekModal{{ $portofolio->id }}Label">
-                            {{ $portofolio->nm_projek }}
-                        </h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+
+
+    <!-- Modal -->
+    <div class="modal fade" style="z-index: 999999;" id="projekModalLainnya" tabindex="-1"
+        aria-labelledby="projekModalLainnyaLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen-sm-down ">
+            <div class="modal-content" style="background-color: #191d88">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalLainTitle"></h1>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <!-- Carousel -->
+                    <div id="modalLainCarousel" class="carousel slide mb-3" data-bs-ride="carousel">
+
+                        <div class="carousel-inner rounded shadow-sm" id="carouselInnerLain" style="height:250px;">
+                        </div>
+
+                        <button class="carousel-control-prev" type="button" data-bs-target="#modalLainCarousel"
+                            data-bs-slide="prev">
+
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+
+                        <button class="carousel-control-next" type="button" data-bs-target="#modalLainCarousel"
+                            data-bs-slide="next">
+
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
                     </div>
-                    <div class="modal-body">
-                        @php $gambars = json_decode($portofolio->gambar, true); @endphp
 
-                        @if ($gambars && count($gambars))
-                            {{-- Carousel Utama --}}
-                            <div id="carouselGambar{{ $portofolio->id }}" class="carousel slide mb-3"
-                                data-bs-ride="carousel">
-                                <div class="carousel-inner rounded shadow-sm" style="height: 250px;">
-                                    @foreach ($gambars as $index => $img)
-                                        <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                                            <div class="position-relative h-100">
-                                                <img src="{{ asset('storage/' . $img) }}"
-                                                    class="d-block w-100 h-100 object-fit-cover rounded gambar-slide"
-                                                    alt="Slide {{ $index + 1 }}" style="cursor: zoom-in;"
-                                                    onclick="previewFull('{{ asset('storage/' . $img) }}')">
-
-                                                <div
-                                                    class="position-absolute top-0 start-0 bg-dark bg-opacity-50 text-white px-2 py-1 small rounded-bottom-end">
-                                                    {{ $index + 1 }} / {{ count($gambars) }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-
-                                @if (count($gambars) > 1)
-                                    <button class="carousel-control-prev" type="button"
-                                        data-bs-target="#carouselGambar{{ $portofolio->id }}" data-bs-slide="prev">
-                                        <span class="carousel-control-prev-icon"></span>
-                                        <span class="visually-hidden">Sebelumnya</span>
-                                    </button>
-                                    <button class="carousel-control-next" type="button"
-                                        data-bs-target="#carouselGambar{{ $portofolio->id }}" data-bs-slide="next">
-                                        <span class="carousel-control-next-icon"></span>
-                                        <span class="visually-hidden">Berikutnya</span>
-                                    </button>
-                                @endif
-                            </div>
-
-                            {{-- Preview Thumbnail --}}
-                            <div class="d-flex gap-2 flex-wrap justify-content-center mb-3">
-                                @foreach ($gambars as $index => $img)
-                                    <img src="{{ asset('storage/' . $img) }}" class="rounded border shadow-sm"
-                                        style="width: 60px; height: 60px; object-fit: cover; cursor: pointer;"
-                                        onclick="bootstrap.Carousel.getInstance(document.querySelector('#carouselGambar{{ $portofolio->id }}')).to({{ $index }})"
-                                        alt="Preview {{ $index + 1 }}">
-                                @endforeach
-                            </div>
-                        @endif
-
-                        {{-- Deskripsi --}}
-                        <div class="pt-2 text-white">{!! $portofolio->deskripsi !!}</div>
-
-                        @php $bahasa = json_decode($portofolio->bahasa_id, true); @endphp
-                        @if (is_array($bahasa) && count($bahasa))
-                            <h5 class="fw-bold mt-3 text-main">Bahasa Pemprograman</h5>
-                            @foreach ($bahasa as $id)
-                                @php $bhs = $bahasas->where('id', $id)->first(); @endphp
-                                @if ($bhs)
-                                    <img src="{{ asset('storage/' . $bhs->gambar) }}" alt="{{ $bhs->nama }}"
-                                        height="30" class="rounded">
-                                @endif
-                            @endforeach
-                        @endif
-
-                        @php $framework = json_decode($portofolio->framework_id, true); @endphp
-                        @if (is_array($framework) && count($framework))
-                            <h5 class="fw-bold mt-3 text-main">Framework</h5>
-                            @foreach ($framework as $id)
-                                @php $frame = $frameworks->where('id', $id)->first(); @endphp
-                                @if ($frame)
-                                    <img src="{{ asset('storage/' . $frame->gambar) }}" alt="{{ $frame->nama }}"
-                                        height="30" class="rounded">
-                                @endif
-                            @endforeach
-                        @endif
-
+                    <!-- Thumbnail -->
+                    <div class="d-flex gap-2 flex-wrap justify-content-center mb-3" id="thumbnailLainContainer">
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                        <a href="{{ $portofolio->link }}" class="btn btn-warning">Lihat projek</a>
-                    </div>
+
+                    <!-- Description -->
+                    <div class="pt-2 text-white" id="modalLainDescription"></div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <a href="#" id="modalLainLink" target="_blank" class="btn btn-warning">Lihat projek</a>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Lightbox-style Preview -->
-        <div id="lightbox" onclick="this.style.display='none'"
-            style="display: none; position: fixed; z-index: 1056; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); align-items: center; justify-content: center;">
-            <img id="lightbox-img" src="" style="max-width: 90vw; max-height: 90vh; border-radius: .5rem;">
-        </div>
+    <!-- Lightbox-style Preview -->
+    <div id="lightbox" onclick="this.style.display='none'"
+        style="display: none; position: fixed; z-index: 1056; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); align-items: center; justify-content: center;">
+        <img id="lightbox-img" src="" style="max-width: 90vw; max-height: 90vh; border-radius: .5rem;">
+    </div>
 
-        <script>
-            function previewFull(src) {
-                const lightbox = document.getElementById('lightbox');
-                const img = document.getElementById('lightbox-img');
-                img.src = src;
-                lightbox.style.display = 'flex';
-            }
-        </script>
-    @endforeach
+    <script>
+        function previewFull(src) {
+            const lightbox = document.getElementById('lightbox');
+            const img = document.getElementById('lightbox-img');
+            img.src = src;
+            lightbox.style.display = 'flex';
+        }
+    </script>
+    <script>
+        document.querySelectorAll('.openProjekLain').forEach(card => {
+            card.addEventListener('click', function() {
+                const title = this.dataset.title;
+                const link = this.dataset.link;
+                const images = JSON.parse(this.dataset.images || '[]');
+
+                // Menggunakan try-catch agar tidak error jika JSON rusak
+                let desc = '';
+                try {
+                    desc = JSON.parse(this.dataset.desc);
+                } catch (e) {
+                    desc = this.dataset.desc;
+                }
+
+                const bahasaIds = JSON.parse(this.dataset.bahasa || '[]');
+                const frameIds = JSON.parse(this.dataset.framework || '[]');
+
+                const semuaBahasa = @json($bahasas);
+                const semuaFrame = @json($frameworks);
+
+                // Update basic info
+                document.getElementById('modalLainTitle').innerText = title;
+                document.getElementById('modalLainLink').href = link;
+
+                // --- PROSES TECH STACK ---
+                let techHtml = '';
+                if (bahasaIds.length > 0) {
+                    techHtml += `<h5 class="fw-bold mt-3 text-main">Bahasa Pemprograman</h5>`;
+                    bahasaIds.forEach(id => {
+                        let b = semuaBahasa.find(x => x.id == id);
+                        if (b) techHtml +=
+                            `<img src="/storage/${b.gambar}" height="30" class="rounded me-2">`;
+                    });
+                }
+
+                if (frameIds.length > 0) {
+                    techHtml += `<h5 class="fw-bold mt-3 text-main">Framework</h5>`;
+                    frameIds.forEach(id => {
+                        let f = semuaFrame.find(x => x.id == id);
+                        if (f) techHtml +=
+                            `<img src="/storage/${f.gambar}" height="30" class="rounded me-2">`;
+                    });
+                }
+
+                document.getElementById('modalLainDescription').innerHTML = desc + techHtml;
+
+                // --- RENDER CAROUSEL & THUMBNAIL ---
+                const carouselInner = document.getElementById('carouselInnerLain');
+                const thumbContainer = document.getElementById('thumbnailLainContainer');
+
+                carouselInner.innerHTML = '';
+                thumbContainer.innerHTML = '';
+
+                images.forEach((img, index) => {
+                    const imageUrl = `/storage/${img}`;
+
+                    carouselInner.innerHTML += `
+                <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                    <div class="position-relative h-100">
+                        <img src="${imageUrl}" class="d-block w-100 h-100 object-fit-cover rounded gambar-slide"
+                             style="cursor: zoom-in;" onclick="previewFull('${imageUrl}')">
+                        <div class="position-absolute top-0 start-0 bg-dark bg-opacity-50 text-white px-2 py-1 small rounded-bottom-end">
+                            ${index + 1} / ${images.length}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+                    thumbContainer.innerHTML += `
+                <img src="${imageUrl}" class="rounded border shadow-sm"
+                     style="width:60px;height:60px;object-fit:cover;cursor:pointer;"
+                     onclick="document.querySelector('#modalLainCarousel button[data-bs-slide-to=\'${index}\']')?.click();
+                              bootstrap.Carousel.getInstance(document.querySelector('#modalLainCarousel')).to(${index})">
+            `;
+                });
+
+                // Refresh instance carousel agar thumbnail berfungsi
+                const myCarousel = document.querySelector('#modalLainCarousel');
+                new bootstrap.Carousel(myCarousel);
+            });
+        });
+
+        function previewFull(src) {
+            const lightbox = document.getElementById('lightbox');
+            document.getElementById('lightbox-img').src = src;
+            lightbox.style.display = 'flex';
+        }
+    </script>
+
     </div>
 
     <!-- Contact -->
-    <div id="contact"></div>
+
     <div style="margin-bottom: 200px" class="contact text-center" data-aos="fade-up">
         <h1>Contact</h1>
 
@@ -533,6 +542,89 @@
     </style>
 
     <!-- End Container -->
+
+
+    <script>
+        document.querySelectorAll('.openProject').forEach(card => {
+            card.addEventListener('click', function() {
+                const title = this.dataset.title;
+                const link = this.dataset.link;
+                const images = JSON.parse(this.dataset.images);
+                // Menggunakan JSON.parse agar tag HTML di dalam deskripsi tetap terbaca sebagai HTML
+                const desc = JSON.parse(this.dataset.desc);
+
+                const bahasaIds = JSON.parse(this.dataset.bahasa || '[]');
+                const frameIds = JSON.parse(this.dataset.framework || '[]');
+
+                const semuaBahasa = @json($bahasas);
+                const semuaFrame = @json($frameworks);
+
+                // Update basic info
+                document.getElementById('modalTitle').innerHTML = title;
+                document.getElementById('modalLink').href = link;
+
+                // --- PROSES TECH STACK ---
+                let techHtml = '';
+                if (bahasaIds.length > 0) {
+                    techHtml += `<h5 class="fw-bold mt-3 text-main">Bahasa Pemprograman</h5>`;
+                    bahasaIds.forEach(id => {
+                        let b = semuaBahasa.find(x => x.id == id);
+                        if (b) techHtml +=
+                            `<img src="/storage/${b.gambar}" height="30" class="rounded me-2">`;
+                    });
+                }
+
+                if (frameIds.length > 0) {
+                    techHtml += `<h5 class="fw-bold mt-3 text-main">Framework</h5>`;
+                    frameIds.forEach(id => {
+                        let f = semuaFrame.find(x => x.id == id);
+                        if (f) techHtml +=
+                            `<img src="/storage/${f.gambar}" height="30" class="rounded me-2">`;
+                    });
+                }
+
+                // --- SET DESKRIPSI + TECH ---
+                // Menggabungkan deskripsi (yang sudah punya tag HTML) dengan techHtml
+                document.getElementById('modalDescription').innerHTML = desc + techHtml;
+
+                // --- RENDER CAROUSEL & THUMBNAIL (Sama seperti punya Anda) ---
+                const carouselInner = document.getElementById('carouselInner');
+                const thumbnailContainer = document.getElementById('thumbnailContainer');
+                carouselInner.innerHTML = '';
+                thumbnailContainer.innerHTML = '';
+
+                images.forEach((img, index) => {
+                    const imageUrl = `/storage/${img}`;
+
+                    carouselInner.innerHTML += `
+                <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                    <div class="position-relative h-100">
+                        <img src="${imageUrl}" class="d-block w-100 h-100 object-fit-cover rounded gambar-slide"
+                             style="cursor: zoom-in;" onclick="previewFull('${imageUrl}')">
+                        <div class="position-absolute top-0 start-0 bg-dark bg-opacity-50 text-white px-2 py-1 small rounded-bottom-end">
+                            ${index + 1} / ${images.length}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+                    thumbnailContainer.innerHTML += `
+                <img src="${imageUrl}" class="rounded border shadow-sm"
+                     style="width:60px;height:60px;object-fit:cover;cursor:pointer;"
+                     onclick="bootstrap.Carousel.getInstance(document.querySelector('#modalCarousel')).to(${index})">
+            `;
+                });
+            });
+        });
+
+        function previewFull(src) {
+            const lightbox = document.getElementById('lightbox');
+            const img = document.getElementById('lightbox-img');
+
+            img.src = src;
+            lightbox.style.display = 'flex';
+        }
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
