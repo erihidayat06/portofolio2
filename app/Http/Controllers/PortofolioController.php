@@ -80,8 +80,8 @@ class PortofolioController extends Controller
             'nm_projek' => $request->nm_projek,
             'gambar' => json_encode($gambarPaths), // Simpan sebagai array JSON
             'deskripsi' => $request->deskripsi,
-            'bahasa_id' => json_encode($request->bahasa_id),
-            'framework_id' => json_encode($request->framework_id),
+            'bahasa_id' => $request->bahasa_id, // Langsung masukkan array
+            'framework_id' => $request->framework_id, // Langsung masukkan array
             'link' => $request->link,
             'urutan' => $maxUrutan + 1,
         ]);
@@ -157,8 +157,8 @@ class PortofolioController extends Controller
             'nm_projek' => $request->nm_projek,
             'gambar' => json_encode($finalGambar),
             'deskripsi' => $request->deskripsi,
-            'bahasa_id' => json_encode($request->bahasa_id),
-            'framework_id' => json_encode($request->framework_id),
+            'bahasa_id' => $request->bahasa_id, // Langsung masukkan array
+            'framework_id' => $request->framework_id, // Langsung masukkan array
             'link' => $request->link,
         ]);
 

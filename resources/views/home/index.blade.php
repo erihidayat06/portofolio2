@@ -256,6 +256,7 @@
                                     @endphp
                                     <div class="card-body">
                                         <h6 class="card-title fw-bold text-truncate">{{ $portofolio->nm_projek }}</h6>
+
                                         <p class="card-text">{!! $deskripsi !!}
 
                                         </p>
