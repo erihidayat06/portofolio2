@@ -118,7 +118,7 @@
                             class="form-select @error('bahasa_id') is-invalid @enderror bahasa-multiple">
                             @foreach ($bahasas as $bahasa)
                                 <option value="{{ $bahasa->id }}"
-                                    {{ collect(json_decode($projek->bahasa_id))->contains($bahasa->id) ? 'selected' : '' }}>
+                                    {{ in_array($bahasa->id, $projek->bahasa_id ?? []) ? 'selected' : '' }}>
                                     {{ $bahasa->nama }}
                                 </option>
                             @endforeach
@@ -135,7 +135,7 @@
                             class="form-select @error('framework_id') is-invalid @enderror framework-multiple">
                             @foreach ($frameworks as $framework)
                                 <option value="{{ $framework->id }}"
-                                    {{ collect(json_decode($projek->framework_id))->contains($framework->id) ? 'selected' : '' }}>
+                                    {{ in_array($framework->id, $projek->framework_id ?? []) ? 'selected' : '' }}>
                                     {{ $framework->nama }}
                                 </option>
                             @endforeach
