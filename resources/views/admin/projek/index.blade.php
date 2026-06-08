@@ -79,7 +79,12 @@
 
                                     </td>
                                     <td>
-                                        @php $bahasa = json_decode($item->bahasa_id, true); @endphp
+                                        @php
+                                            // Jika sudah di-cast array di model, langsung ambil nilainya
+                                            $bahasa = is_array($item->bahasa_id)
+                                                ? $item->bahasa_id
+                                                : json_decode($item->bahasa_id, true);
+                                        @endphp
                                         @if (is_array($bahasa) && count($bahasa))
                                             <ul class="list-unstyled mb-0 d-flex flex-column gap-1">
                                                 @foreach ($bahasa as $id)
@@ -99,7 +104,13 @@
                                     </td>
 
                                     <td>
-                                        @php $framework = json_decode($item->framework_id, true); @endphp
+                                        @php
+                                            // Jika sudah di-cast array di model, langsung ambil nilainya
+                                            $framework = is_array($item->framework_id)
+                                                ? $item->framework_id
+                                                : json_decode($item->framework_id, true);
+                                        @endphp
+
                                         @if (is_array($framework) && count($framework))
                                             <ul class="list-unstyled mb-0 d-flex flex-column gap-1">
                                                 @foreach ($framework as $id)
