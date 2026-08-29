@@ -28,6 +28,7 @@ use Intervention\Image\Laravel\Facades\Image;
 
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/share/{shareLink:slug}', [ShareLinkController::class, 'show']);
+Route::post('/share/{id}/complete', [ShareLinkController::class, 'trackComplete'])->name('share.complete');
 
 
 

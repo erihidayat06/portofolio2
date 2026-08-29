@@ -3,7 +3,6 @@
 @section('content')
     <div class="container">
 
-
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" id="success-alert">
                 {{ session('success') }}
@@ -15,9 +14,9 @@
                     if (alert) {
                         alert.classList.remove('show');
                         alert.classList.add('fade');
-                        setTimeout(() => alert.remove(), 500); // hapus dari DOM setelah animasi
+                        setTimeout(() => alert.remove(), 500);
                     }
-                }, 3000); // 3 detik
+                }, 3000);
             </script>
         @endif
 
@@ -35,7 +34,8 @@
                                 <th>No</th>
                                 <th>Nama</th>
                                 <th>Nama Link</th>
-                                <th>Link share</th>
+                                <th>Link Share</th>
+                                <th>Statistik</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -47,12 +47,10 @@
                                     <td>{{ $share->link }}</td>
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            {{-- Link share --}}
                                             <a href="{{ url('share/' . $share->slug) }}" target="_blank" class="me-2">
                                                 {{ url('share/' . $share->slug) }}
                                             </a>
 
-                                            {{-- Tombol Copy --}}
                                             <button type="button" class="btn btn-sm btn-outline-secondary copy-btn"
                                                 data-link="{{ url('share/' . $share->slug) }}">
                                                 Copy
@@ -60,19 +58,26 @@
                                         </div>
                                     </td>
 
-                                    <td>
-                                        {{-- Tombol Edit --}}
-                                        <a href="{{ route('share-link.edit', $share->id) }}"
-                                            class="btn btn-sm btn-primary">Edit</a>
+                                    <!-- Kolom Statistik Baru -->
+                                    <td class="text-center align-middle">
+                                        <span class="badge bg-success">
+                                            {{ $share->completed ?? 0 }}
+                                        </span>
+                                    </td>
 
-                                        {{-- Form Hapus --}}
-                                        <form action="{{ route('share-link.destroy', $share->id) }}" method="POST"
-                                            class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn btn-sm btn-danger"
-                                                onclick="return confirm('Yakin hapus?')">Hapus</button>
-                                        </form>
+                                    <td class="text-center align-middle">
+                                        <div class="d-flex justify-content-center align-items-center gap-1">
+                                            <a href="{{ route('share-link.edit', $share->id) }}"
+                                                class="btn btn-sm btn-primary">Edit</a>
+
+                                            <form action="{{ route('share-link.destroy', $share->id) }}" method="POST"
+                                                class="d-inline mb-0">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="btn btn-sm btn-danger"
+                                                    onclick="return confirm('Yakin hapus?')">Hapus</button>
+                                            </form>
+                                        </div>
                                     </td>
 
                                 </tr>

@@ -57,10 +57,24 @@ class ShareLinkController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ShareLink $shareLink)
+    public function show($slug)
     {
-        $affiliate = Affiliate::inRandomOrder()->first();
-        return view('admin.showShare.index',  compact('shareLink', 'affiliate'));
+        $shareLink = ShareLink::where('slug', $slug)->firstOrFail();
+
+        // Increment total pengunjung halaman unlock
+        $shareLink->increment('clicks');
+
+        $affiliate = Affiliate::first(); // Sesuaikan dengan logika affiliate Anda
+
+        return view('admin.showShare.index', compact('shareLink', 'affiliate'));
+    }
+
+    public function trackComplete($id)
+    {
+        $shareLink = ShareLink::findOrFail($id);
+        $shareLink->increment('completed');
+
+        return response()->json(['status' => 'success']);
     }
 
     /**

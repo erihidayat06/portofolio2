@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Follow Unlock</title>
 
     <!-- Bootstrap -->
@@ -36,7 +37,8 @@
                 </a>
 
                 <!-- Tombol Lanjut Asli (Step 2 dari 2, hidden dulu) -->
-                <a href="{{ $shareLink->link }}" id="realBtn" class="btn btn-success fw-bold w-100 mt-2 d-none">
+                <a href="{{ $shareLink->link }}" target="_blank" id="realBtn"
+                    class="btn btn-success fw-bold w-100 mt-2 d-none">
                     <span>🔓 Buka Link Tujuan (2/2)</span>
                     <i class="bi bi-box-arrow-up-right ms-2"></i>
                 </a>
@@ -52,17 +54,14 @@
 
         // Aktifkan tombol affiliate setelah follow Facebook
         followBtn?.addEventListener("click", function() {
-            // Ubah ikon ke tanda centang & ubah teks
             document.getElementById("lockIcon").className = "bi bi-check-circle-fill me-2";
             document.getElementById("followText").innerText = "Sudah Diikuti";
 
-            // Nonaktifkan tombol Facebook (Disable)
             followBtn.classList.add("disabled");
             followBtn.setAttribute("aria-disabled", "true");
             followBtn.setAttribute("tabindex", "-1");
             followBtn.style.pointerEvents = "none";
 
-            // Mengaktifkan tombol Step 1/2
             affiliateBtn.classList.remove("disabled");
             affiliateBtn.removeAttribute("aria-disabled");
             affiliateBtn.removeAttribute("tabindex");
@@ -71,9 +70,20 @@
         // Setelah klik tombol affiliate → sembunyikan tombol affiliate & munculkan tombol final (2/2)
         affiliateBtn.addEventListener("click", function() {
             setTimeout(() => {
-                affiliateBtn.classList.add("d-none"); // sembunyikan step 1/2
-                realBtn.classList.remove("d-none"); // tampilkan step 2/2
-            }, 500); // delay 0.5 detik
+                affiliateBtn.classList.add("d-none");
+                realBtn.classList.remove("d-none");
+            }, 500);
+        });
+
+        // Track ketika user klik link asli (Tuntas)
+        realBtn.addEventListener("click", function() {
+            fetch("/share/{{ $shareLink->id }}/complete", {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                    "Content-Type": "application/json"
+                }
+            });
         });
     </script>
 
