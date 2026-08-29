@@ -23,7 +23,7 @@
                 <h6 class="card-title mb-4 fw-bold">Ikuti Halaman Facebook untuk membuka link</h6>
 
                 <!-- Tombol Follow Facebook -->
-                <a href="https://www.facebook.com/erisemonomono" target="_blank" id="followBtn"
+                <a href="{{ config('services.facebook.page_url') }}" target="_blank" id="followBtn"
                     class="btn btn-primary w-100 mb-3 d-flex justify-content-center align-items-center">
                     <i id="lockIcon" class="bi bi-facebook me-2"></i>
                     <span id="followText">Klik Ikuti Halaman Facebook</span>

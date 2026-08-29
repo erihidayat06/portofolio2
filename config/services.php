@@ -31,4 +31,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'facebook' => [
+        'page_url' => env('FACEBOOK_PAGE_URL', 'https://www.facebook.com/erisemonomono'),
+    ],
+
 ];
