@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subscribe Unlock</title>
+    <title>Follow Unlock</title>
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -19,68 +19,61 @@
     <div class="container mt-5">
         <div class="col-md-6 mx-auto text-center">
             <div class="card shadow-lg p-4">
-                <h4 class="card-title  fw-bold">{{ $shareLink->nama }}</h4>
-                <h6 class="card-title mb-4 fw-bold">Subscribe untuk membuka link</h6>
+                <h4 class="card-title fw-bold">{{ $shareLink->nama }}</h4>
+                <h6 class="card-title mb-4 fw-bold">Ikuti Halaman Facebook untuk membuka link</h6>
 
-                <!-- Tombol Subscribe (gembok) -->
-                <a href="https://www.youtube.com/channel/UC0bcUTL31f_vC-EzZo-rzjA?sub_confirmation=1" target="_blank"
-                    id="subscribeBtn"
-                    class="btn btn-danger w-100 mb-3 d-flex justify-content-center align-items-center">
-                    <i id="lockIcon" class="bi bi-lock-fill me-2"></i>
-                    <span id="subscribeText">Subscribe YouTube</span>
+                <!-- Tombol Follow Facebook -->
+                <a href="https://www.facebook.com/erisemonomono" target="_blank" id="followBtn"
+                    class="btn btn-primary w-100 mb-3 d-flex justify-content-center align-items-center">
+                    <i id="lockIcon" class="bi bi-facebook me-2"></i>
+                    <span id="followText">Klik Ikuti Halaman Facebook</span>
                 </a>
 
-                <!-- Tombol Lanjut Affiliate (Step 1) -->
+                <!-- Tombol Lanjut Affiliate (Step 1 dari 2) -->
                 <a href="{{ $affiliate->link }}" id="affiliateBtn" target="_blank"
                     class="btn btn-success w-100 disabled" tabindex="-1" aria-disabled="true">
-                    ✅ Lanjut (Step 1)
+                    ✅ Lanjut (Step 1/2)
                 </a>
 
-                <!-- Tombol Lanjut Asli (Step 2, hidden dulu) -->
-                <a href="{{ $shareLink->link }}" id="realBtn" class="btn btn-primary w-100 mt-2 d-none">
-                    🚀 Lanjut ke Link Asli (Step 2)
+                <!-- Tombol Lanjut Asli (Step 2 dari 2, hidden dulu) -->
+                <a href="{{ $shareLink->link }}" id="realBtn" class="btn btn-success fw-bold w-100 mt-2 d-none">
+                    <span>🔓 Buka Link Tujuan (2/2)</span>
+                    <i class="bi bi-box-arrow-up-right ms-2"></i>
                 </a>
-
-                <script>
-                    const affiliateBtn = document.getElementById("affiliateBtn");
-                    const realBtn = document.getElementById("realBtn");
-
-                    // Aktifkan tombol affiliate setelah subscribe
-                    document.getElementById("subscribeBtn")?.addEventListener("click", function() {
-                        affiliateBtn.classList.remove("disabled");
-                        affiliateBtn.removeAttribute("aria-disabled");
-                        affiliateBtn.removeAttribute("tabindex");
-                    });
-
-                    // Setelah klik tombol affiliate → sembunyikan tombol affiliate & munculkan tombol asli
-                    affiliateBtn.addEventListener("click", function() {
-                        setTimeout(() => {
-                            affiliateBtn.classList.add("d-none"); // sembunyikan step 1
-                            realBtn.classList.remove("d-none"); // tampilkan step 2
-                        }, 500); // delay supaya user sempat diarahkan dulu
-                    });
-                </script>
-
-
-
-
 
             </div>
         </div>
     </div>
 
     <script>
-        document.getElementById("subscribeBtn").addEventListener("click", function() {
-            // Ubah icon gembok ke terbuka
-            document.getElementById("lockIcon").classList.remove("bi-lock-fill");
-            document.getElementById("lockIcon").classList.add("bi-unlock-fill");
-            document.getElementById("subscribeText").innerText = "Subscribed";
+        const followBtn = document.getElementById("followBtn");
+        const affiliateBtn = document.getElementById("affiliateBtn");
+        const realBtn = document.getElementById("realBtn");
 
-            // Aktifkan tombol lanjut
-            const nextBtn = document.getElementById("nextBtn");
-            nextBtn.classList.remove("disabled");
-            nextBtn.removeAttribute("aria-disabled");
-            nextBtn.removeAttribute("tabindex");
+        // Aktifkan tombol affiliate setelah follow Facebook
+        followBtn?.addEventListener("click", function() {
+            // Ubah ikon ke tanda centang & ubah teks
+            document.getElementById("lockIcon").className = "bi bi-check-circle-fill me-2";
+            document.getElementById("followText").innerText = "Sudah Diikuti";
+
+            // Nonaktifkan tombol Facebook (Disable)
+            followBtn.classList.add("disabled");
+            followBtn.setAttribute("aria-disabled", "true");
+            followBtn.setAttribute("tabindex", "-1");
+            followBtn.style.pointerEvents = "none";
+
+            // Mengaktifkan tombol Step 1/2
+            affiliateBtn.classList.remove("disabled");
+            affiliateBtn.removeAttribute("aria-disabled");
+            affiliateBtn.removeAttribute("tabindex");
+        });
+
+        // Setelah klik tombol affiliate → sembunyikan tombol affiliate & munculkan tombol final (2/2)
+        affiliateBtn.addEventListener("click", function() {
+            setTimeout(() => {
+                affiliateBtn.classList.add("d-none"); // sembunyikan step 1/2
+                realBtn.classList.remove("d-none"); // tampilkan step 2/2
+            }, 500); // delay 0.5 detik
         });
     </script>
 
