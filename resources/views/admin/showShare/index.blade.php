@@ -15,7 +15,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Monetag Multitag Script -->
-    <script src="https://nap5k.com/tag.min.js" data-zone="11838458" async data-cfasync="false"></script>
+    <script>
+        (function(s) {
+            s.dataset.zone = '11838458', s.src = 'https://nap5k.com/tag.min.js'
+        })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))
+    </script>
+    <script>
+        (function(s) {
+            s.dataset.zone = '11839027', s.src = 'https://n6wxm.com/vignette.min.js'
+        })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))
+    </script>
 </head>
 
 <body class="bg-light">
@@ -23,13 +32,6 @@
     <div class="container my-5">
         <div class="col-md-7 mx-auto">
 
-            <!-- Slot 1: Banner Iklan Atas Halaman -->
-            <div class="text-center mb-3">
-                <div class="p-2 bg-white rounded border shadow-sm d-inline-block w-100" style="min-height: 90px;">
-                    <small class="text-muted d-block mb-1" style="font-size: 10px;">IKLAN</small>
-                    <!-- Masukkan Script In-Page Push / Banner Atas di sini (opsional) -->
-                </div>
-            </div>
 
             <!-- Card Utama Unlock Link -->
             <div class="card shadow-lg p-4 text-center mb-4">
@@ -55,14 +57,6 @@
                     <i class="bi bi-unlock-fill me-2"></i>
                     <span>2. Klik untuk Menyiapkan Link</span>
                 </a>
-
-                <!-- Slot 2: Banner Iklan Tengah -->
-                <div class="my-3 text-center">
-                    <div class="p-2 bg-light border rounded" style="min-height: 250px;">
-                        <small class="text-muted d-block mb-1" style="font-size: 10px;">IKLAN</small>
-                        <!-- Masukkan Script Banner Tengah di sini (opsional) -->
-                    </div>
-                </div>
 
                 <!-- Status Timer -->
                 <button id="timerBtn" class="btn btn-secondary w-100 mb-2" disabled>
@@ -90,12 +84,13 @@
                             <tr>
                                 <th>Nama Link</th>
                                 <th class="text-center" style="width: 130px;">Total Klik</th>
-                                <th class="text-end" style="width: 100px;">Aksi</th>
+
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($otherLinks ?? [] as $item)
-                                <tr>
+                                <tr onclick="window.location='{{ url('/share/' . ($item->slug ?? $item->id)) }}'"
+                                    style="cursor: pointer;">
                                     <td>
                                         <div class="fw-semibold text-truncate" style="max-width: 250px;">
                                             {{ $item->nama }}
@@ -107,16 +102,10 @@
                                             {{ number_format($item->completed_count ?? 0) }}
                                         </span>
                                     </td>
-                                    <td class="text-end">
-                                        <a href="{{ url('/share/' . ($item->slug ?? $item->id)) }}"
-                                            class="btn btn-sm btn-outline-primary fw-bold">
-                                            Buka <i class="bi bi-arrow-right"></i>
-                                        </a>
-                                    </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="text-center text-muted py-3">
+                                    <td colspan="2" class="text-center text-muted py-3">
                                         Belum ada link lainnya.
                                     </td>
                                 </tr>
@@ -131,13 +120,6 @@
                 </div>
             </div>
 
-            <!-- Slot 3: Banner Iklan Bawah Halaman -->
-            <div class="text-center mt-4">
-                <div class="p-2 bg-white rounded border shadow-sm d-inline-block w-100" style="min-height: 90px;">
-                    <small class="text-muted d-block mb-1" style="font-size: 10px;">IKLAN</small>
-                    <!-- Masukkan Script Banner Bawah di sini (opsional) -->
-                </div>
-            </div>
 
         </div>
     </div>
