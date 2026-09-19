@@ -20,8 +20,6 @@
 
     {{-- Style --}}
     <link rel="stylesheet" href="/assets/css/main.css">
-
-    <script src="https://quge5.com/88/tag.min.js" data-zone="283025" async data-cfasync="false"></script>
 </head>
 
 <body style="background-color: #191d88">
