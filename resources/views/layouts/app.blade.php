@@ -15,11 +15,7 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <script>
-        (function(s) {
-            s.dataset.zone = '11838458', s.src = 'https://nap5k.com/tag.min.js'
-        })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))
-    </script>
+    <script src="https://nap5k.com/tag.min.js" data-zone="11838458" async data-cfasync="false"></script>
 </head>
 
 <body class="font-sans antialiased">
