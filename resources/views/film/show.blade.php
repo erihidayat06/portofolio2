@@ -84,7 +84,7 @@
             background-color: #b80710;
         }
 
-        /* Layout Grid Utama (Kiri & Kanan) */
+        /* Layout Grid Utama */
         .main-layout {
             display: grid;
             grid-template-columns: 1fr 340px;
@@ -97,7 +97,6 @@
             }
         }
 
-        /* Video & Details Section (Kiri) */
         .left-content {
             display: flex;
             flex-direction: column;
@@ -231,7 +230,7 @@
             margin: 0;
         }
 
-        /* Section Rekomendasi di Bawah Player (Sejenis / Related) */
+        /* Section Rekomendasi */
         .related-section {
             background-color: #181818;
             border-radius: 10px;
@@ -283,7 +282,7 @@
             text-align: center;
         }
 
-        /* Sidebar Rekomendasi Bulan Ini (Kanan) */
+        /* Sidebar */
         .sidebar {
             background-color: #181818;
             border-radius: 10px;
@@ -353,17 +352,21 @@
             <div class="input-group movie-only">
                 <label for="movie-server">Server Movie</label>
                 <select id="movie-server" onchange="loadPlayer()">
-                    <option value="2embed-vcr" selected>2Embed (VCR)</option>
-                    <option value="2embed-videm">2Embed (VidEm)</option>
-                    <option value="vidsrcme">VidSrc.me</option>
+                    <option value="vidlink" selected>VidLink Pro (Sub Auto)</option>
+                    <option value="2embed-vcr">2Embed (VCR)</option>
                     <option value="vidsrcto">VidSrc.to</option>
+                    <option value="vidsrcme">VidSrc.me</option>
+                    <option value="2embed-videm">2Embed (VidEm)</option>
                 </select>
             </div>
 
             <div class="input-group tv-only">
                 <label for="tv-server">Server TV</label>
                 <select id="tv-server" onchange="loadPlayer()">
-                    <option value="2embed-vcr" selected>2Embed (VCR)</option>
+                    <option value="vidlink" selected>VidLink Pro (Sub Auto)</option>
+                    <option value="2embed-vcr">2Embed (VCR)</option>
+                    <option value="vidsrcto">VidSrc.to</option>
+                    <option value="vidsrcme">VidSrc.me</option>
                 </select>
             </div>
 
@@ -377,9 +380,8 @@
             <button class="btn-play" onclick="loadPlayer()">Putar Video</button>
         </div>
 
-        <!-- Main Layout (Kiri & Kanan) -->
+        <!-- Main Layout -->
         <div class="main-layout">
-            <!-- Sisi Kiri: Video, Panel Episode, Info Cast/Judul, & Rekomendasi Terkait -->
             <div class="left-content">
                 <div class="player-card">
                     <div class="iframe-wrapper">
@@ -393,7 +395,7 @@
                     <div class="episode-grid" id="episode-grid"></div>
                 </div>
 
-                <!-- Info Detail Film/Series (Judul, Cast, Sinopsis, dsb) -->
+                <!-- Info Detail Film/Series -->
                 <div class="details-card">
                     <img id="detail-poster" class="details-poster" src="" alt="Poster">
                     <div class="details-info">
@@ -408,14 +410,14 @@
                     </div>
                 </div>
 
-                <!-- Rekomendasi Terkait (Sesuai dengan yang ditonton sekarang) -->
+                <!-- Rekomendasi Terkait -->
                 <div class="related-section">
                     <h3 class="section-title">Rekomendasi Terkait</h3>
                     <div class="horizontal-grid" id="related-grid"></div>
                 </div>
             </div>
 
-            <!-- Sisi Kanan: Rekomendasi Bulan Ini -->
+            <!-- Sidebar -->
             <div class="sidebar">
                 <h3 class="section-title">Rekomendasi Bulan Ini</h3>
                 <div class="sidebar-list" id="monthly-grid"></div>
@@ -461,7 +463,6 @@
             }
         }
 
-        /* Memuat Detail Informasi (Judul, Cast, Genre, Sinopsis, Poster) */
         async function loadMediaDetails() {
             if (!currentTmdbId) return;
             const endpoint =
@@ -493,7 +494,6 @@
             }
         }
 
-        /* Memuat Rekomendasi Terkait (Sesuai dengan yang ditonton) */
         async function fetchRelatedRecommendations() {
             if (!currentTmdbId) return;
             const endpoint =
@@ -530,7 +530,6 @@
             }
         }
 
-        /* Memuat Rekomendasi Bulan Ini (Trending/Popular) */
         async function fetchMonthlyRecommendations() {
             const endpoint =
                 `https://api.themoviedb.org/3/trending/${contentType}/week?api_key=${TMDB_API_KEY}&language=id-ID`;
@@ -568,7 +567,6 @@
             }
         }
 
-        /* Pengelolaan TV Seasons & Episodes */
         async function fetchSeasons(targetSeason = null) {
             const seasonSelect = document.getElementById("season-select");
             if (!currentTmdbId) return;
@@ -662,7 +660,7 @@
             loadPlayer();
         }
 
-        /* Player Embed Logic */
+        /* Player Embed Logic dengan penyesuaian parameter Subtitle */
         function loadPlayer() {
             if (!currentTmdbId) return;
 
@@ -671,18 +669,21 @@
             if (contentType === "movie") {
                 const movieServer = document.getElementById("movie-server").value;
                 switch (movieServer) {
+                    case "vidlink":
+                        playerUrl = `https://vidlink.pro/movie/${currentTmdbId}?primaryColor=e50914&subLang=id`;
+                        break;
                     case "2embed-videm":
-                        playerUrl = `https://videm.xyz/embed/movie/${currentTmdbId}`;
+                        playerUrl = `https://videm.xyz/embed/movie/${currentTmdbId}?sub_id=id`;
                         break;
                     case "vidsrcme":
-                        playerUrl = `https://vidsrc.me/embed/movie?tmdb=${currentTmdbId}`;
+                        playerUrl = `https://vidsrc.me/embed/movie?tmdb=${currentTmdbId}&sub_id=id`;
                         break;
                     case "vidsrcto":
                         playerUrl = `https://vidsrc.to/embed/movie/${currentTmdbId}`;
                         break;
                     case "2embed-vcr":
                     default:
-                        playerUrl = `https://streamsrcs.2embed.cc/vcr?tmdb=${currentTmdbId}`;
+                        playerUrl = `https://streamsrcs.2embed.cc/vcr?tmdb=${currentTmdbId}&ds_lang=id`;
                         break;
                 }
             } else {
@@ -691,9 +692,21 @@
                 const tvServer = document.getElementById("tv-server").value;
 
                 switch (tvServer) {
+                    case "vidlink":
+                        playerUrl =
+                            `https://vidlink.pro/tv/${currentTmdbId}/${season}/${episode}?primaryColor=e50914&subLang=id`;
+                        break;
+                    case "vidsrcto":
+                        playerUrl = `https://vidsrc.to/embed/tv/${currentTmdbId}/${season}/${episode}`;
+                        break;
+                    case "vidsrcme":
+                        playerUrl =
+                            `https://vidsrc.me/embed/tv?tmdb=${currentTmdbId}&season=${season}&episode=${episode}&sub_id=id`;
+                        break;
                     case "2embed-vcr":
                     default:
-                        playerUrl = `https://streamsrcs.2embed.cc/vcr-tv?tmdb=${currentTmdbId}&s=${season}&e=${episode}`;
+                        playerUrl =
+                            `https://streamsrcs.2embed.cc/vcr-tv?tmdb=${currentTmdbId}&s=${season}&e=${episode}&ds_lang=id`;
                         break;
                 }
             }
