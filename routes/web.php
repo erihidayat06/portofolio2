@@ -5,6 +5,7 @@ use App\Models\Bahasa;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BahasaController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\FilmController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FrameworkController;
 use App\Http\Controllers\Home\HomeController;
@@ -43,6 +44,8 @@ Route::put('/admin/{profilWeb:id}', [ProfilWebController::class, 'update'])
     ->middleware(['auth', 'verified'])
     ->name('admin.dashboard.update');
 
+Route::get('/film', [FilmController::class, 'index']);
+Route::get('/film/show', [FilmController::class, 'show']);
 
 Route::middleware('auth')->group(function () {
     Route::resource('/admin/projek', PortofolioController::class)->parameters([
