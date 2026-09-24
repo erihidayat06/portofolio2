@@ -15,7 +15,7 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <script src="https://nap5k.com/tag.min.js" data-zone="11838458" async data-cfasync="false"></script>
+
 </head>
 
 <body class="font-sans antialiased">
